@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "title": "The H World",
+    "subtitle": "EVERYDAY ENHANCEMENT FOR YOUR HAIR",
+    "image": "/assets/img/bg/bgo.webp",
+    "url": "/shop-grid-standard"
+  },
+  {
+    "id": 2,
+    "title": "The H World",
+    "subtitle": "EVERYDAY ENHANCEMENT FOR YOUR HAIR",
+    "image": "/assets/img/bg/bgg.webp",
+    "url": "/shop-grid-standard"
+  }
+]

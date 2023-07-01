@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "image": "/assets/img/blog/hairoil.webp",
+    "category": ["hair care", "men"],
+    "title": "The H World's Herbal Hair Oil ",
+    "url": "/blog-details-standard",
+    "author": "Admin",
+    "authorUrl": "/blog-standard"
+  },
+  {
+    "id": 2,
+    "image": "/assets/img/blog/hairoil.webp",
+    "category": ["hair care"],
+    "title": "The H World's Herbal Hair Oil",
+    "url": "/blog-details-standard",
+    "author": "Admin",
+    "authorUrl": "/blog-standard"
+  },
+  {
+    "id": 3,
+    "image": "/assets/img/blog/hairoil.webp",
+    "category": ["hair care"],
+    "title": "The H World's Herbal Hair Oil",
+    "url": "/blog-details-standard",
+    "author": "Admin",
+    "authorUrl": "/blog-standard"
+  }
+]
