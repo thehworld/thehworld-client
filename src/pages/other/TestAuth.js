@@ -7,7 +7,7 @@ const TestAuth = () => {
     
     const [user, setUser] = useState('');
     useEffect(() => {
-        axios.get('https://localhost:8080/check/user',{ withCredentials: true }).then((res) => {
+        axios.get('https://thehworld-ecom-staging.onrender.com/check/user',{ withCredentials: true }).then((res) => {
             console.log("User Details - ", res);
         }).catch((err) => {
             console.log(err);

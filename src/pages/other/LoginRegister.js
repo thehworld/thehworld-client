@@ -16,7 +16,7 @@ const LoginRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   useEffect(() => {
-    window.open("https://localhost:8080/auth/google", "_self"); 
+    window.open("https://thehworld-ecom-staging.onrender.com/auth/google", "_self"); 
   },[])
 
 

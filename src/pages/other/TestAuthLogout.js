@@ -7,7 +7,7 @@ const TestAuthLogout = () => {
     
     const [user, setUser] = useState('');
     useEffect(() => {
-        axios.get('https://localhost:8080/auth/google/logout',{ withCredentials: true }).then((res) => {
+        axios.get('https://thehworld-ecom-staging.onrender.com/auth/google/logout',{ withCredentials: true }).then((res) => {
             console.log("User Details - ", res);
         }).catch((err) => {
             console.log(err);
