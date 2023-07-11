@@ -54,6 +54,18 @@ export const userIsLoggedin = () => {
 
 // **********************************************************************************
 
+// ?? Product
+
+export const getAProductDetail = (productId) => {
+    return axios(`${API_USE}/get/a/product/${productId}`).then((res) => {
+        return res;
+    }).catch((err) => {
+        console.log("Error - ", err);
+    });
+}
+
+
+
 
 export const getAllCategories = () => {
     return axios.get(`${API_USE}/get/all/categories`, { withCredentials: true })

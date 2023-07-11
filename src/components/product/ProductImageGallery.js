@@ -10,8 +10,11 @@ import Swiper, { SwiperSlide } from "../../components/swiper";
 const ProductImageGallery = ({ product }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [index, setIndex] = useState(-1);
-  const slides = product?.image.map((img, i) => ({
-      src: process.env.PUBLIC_URL + img,
+
+  console.log(product);
+
+  const slides = product?.productImages.map((img, i) => ({
+      src: img,
       key: i,
   }));
 
@@ -43,26 +46,26 @@ const ProductImageGallery = ({ product }) => {
       <div className="product-large-image-wrapper">
         {product.discount || product.new ? (
           <div className="product-img-badges">
-            {product.discount ? (
-              <span className="pink">-{product.discount}%</span>
+            {product.productDiscountPrice ? (
+              <span className="pink">-{product.productDiscountPrice}%</span>
             ) : (
               ""
             )}
-            {product.new ? <span className="purple">New</span> : ""}
+            {product.productDiscountPrice ? <span className="purple">Offer</span> : ""}
           </div>
         ) : (
           ""
         )}
-        {product?.image?.length ? (
+        {product?.productImages?.length ? (
           <Swiper options={gallerySwiperParams}>
-            {product.image.map((single, key) => (
+            {product.productImages.map((single, key) => (
               <SwiperSlide key={key}>
                 <button className="lightgallery-button" onClick={() => setIndex(key)}>
                   <i className="pe-7s-expand1"></i>
                 </button>
                 <div className="single-image">
                   <img
-                    src={process.env.PUBLIC_URL + single}
+                    src={single}
                     className="img-fluid"
                     alt=""
                   />
@@ -81,13 +84,13 @@ const ProductImageGallery = ({ product }) => {
 
       </div>
       <div className="product-small-image-wrapper mt-15">
-        {product?.image?.length ? (
+        {product?.productImages?.length ? (
           <Swiper options={thumbnailSwiperParams}>
-            {product.image.map((single, key) => (
+            {product.productImages.map((single, key) => (
               <SwiperSlide key={key}>
                 <div className="single-image">
                   <img
-                    src={process.env.PUBLIC_URL + single}
+                    src={single}
                     className="img-fluid"
                     alt=""
                   />

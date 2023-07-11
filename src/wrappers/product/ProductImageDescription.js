@@ -8,18 +8,8 @@ import ProductImageGallerySideThumb from "../../components/product/ProductImageG
 import ProductImageFixed from "../../components/product/ProductImageFixed";
 
 const ProductImageDescription = ({ spaceTopClass, spaceBottomClass, galleryType, product }) => {
-  const currency = useSelector((state) => state.currency);
-  const { cartItems } = useSelector((state) => state.cart);
-  const { wishlistItems } = useSelector((state) => state.wishlist);
-  const { compareItems } = useSelector((state) => state.compare);
-  const wishlistItem = wishlistItems.find(item => item.id === product._id);
-  const compareItem = compareItems.find(item => item.id === product._id);
-
-  const discountedPrice = getDiscountPrice(product.productPrice, product.productDiscountPrice);
-  const finalProductPrice = +(product.productPrice * 1).toFixed(2);
-  const finalDiscountedPrice = +(
-    discountedPrice * currency.currencyRate
-  ).toFixed(2);
+  
+  console.log('product < ', product);
 
   return (
     <div className={clsx("shop-area", spaceTopClass, spaceBottomClass)}>
@@ -44,13 +34,9 @@ const ProductImageDescription = ({ spaceTopClass, spaceBottomClass, galleryType,
             {/* product description info */}
             <ProductDescriptionInfo
               product={product}
-              discountedPrice={discountedPrice}
-              currency={currency}
-              finalDiscountedPrice={finalDiscountedPrice}
-              finalProductPrice={finalProductPrice}
-              cartItems={cartItems}
-              wishlistItem={wishlistItem}
-              compareItem={compareItem}
+              discountedPrice={product.productDiscountPrice}
+              finalDiscountedPrice={product.productDiscountPrice}
+              finalProductPrice={product.productPrice}
             />
           </div>
         </div>
