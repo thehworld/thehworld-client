@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import { GoogleLogin } from '@react-oauth/google';
-import { Link, useLocation, redirect  } from "react-router-dom"; 
+import { Link, useLocation, redirect, Navigate, useNavigate  } from "react-router-dom"; 
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import SEO from "../../components/seo";
@@ -32,6 +32,7 @@ const LoginRegister = () => {
   const [isRLoading, setIsRLoading] = useState(false);
   const [isRError, setIsRError] = useState(false);
 
+  const navigate = useNavigate();
 
   const userLoginSubmit = (e) => {
     e.preventDefault();
@@ -47,7 +48,7 @@ const LoginRegister = () => {
       console.log('User Signup',res);
       if(res.data.token){
         Cookies.set("TID",res.data.token); 
-        return redirect("/");
+        navigate("/")
       }
     }).catch((err) => {
         console.log('Error - ', err); 
@@ -70,6 +71,7 @@ const LoginRegister = () => {
             {label: "Login Register", path: process.env.PUBLIC_URL + pathname }
           ]} 
         />
+       
         <GoogleLogin
   onSuccess={credentialResponse => {
     console.log("credentialResponse", credentialResponse);
