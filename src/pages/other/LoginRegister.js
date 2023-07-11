@@ -1,11 +1,16 @@
 import React, { Fragment, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom"; 
+import { GoogleLogin } from '@react-oauth/google';
+import { Link, useLocation, redirect  } from "react-router-dom"; 
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { useState } from "react";
+import jwt_decode from "jwt-decode";
+import { userSignup } from "../../apis/api";
+import Cookies from "js-cookie";
+
 
 const LoginRegister = () => {
   let { pathname } = useLocation();
@@ -15,9 +20,7 @@ const LoginRegister = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  useEffect(() => {
-    window.open("https://thehworld-ecom-staging.onrender.com/auth/google", "_self"); 
-  },[])
+  
 
 
   // Register User Here
@@ -36,6 +39,23 @@ const LoginRegister = () => {
   }
 
 
+  const userAuthHere = (user) => {
+    if(!user){
+      return 1;
+    }
+    userSignup(user).then((res) => {
+      console.log('User Signup',res);
+      if(res.data.token){
+        Cookies.set("TID",res.data.token); 
+        return redirect("/");
+      }
+    }).catch((err) => {
+        console.log('Error - ', err); 
+    })
+  }
+
+
+
   return (
     <Fragment>
       <SEO
@@ -50,6 +70,18 @@ const LoginRegister = () => {
             {label: "Login Register", path: process.env.PUBLIC_URL + pathname }
           ]} 
         />
+        <GoogleLogin
+  onSuccess={credentialResponse => {
+    console.log("credentialResponse", credentialResponse);
+    var token = credentialResponse.credential;
+    var decoded = jwt_decode(token);
+    console.log("User Data - ", decoded);
+    userAuthHere(decoded)
+  }}
+  onError={() => {
+    console.log('Login Failed');
+  }}
+/>;
         <div className="login-register-area pt-100 pb-100">
           <div className="container">
             <div className="row">

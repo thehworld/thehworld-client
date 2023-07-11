@@ -1,11 +1,14 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Cookies from "js-cookie";
 import Shipping from "./pages/policies/Shipping";
 import Privacy from "./pages/policies/Privacy";
 import Terms from "./pages/policies/Terms";
 import TestAuth from "./pages/other/TestAuth";
 import TestAuthLogout from "./pages/other/TestAuthLogout";
+import TestRouter from "./pages/other/TestRouter";
+import UserRoutes from "./routes/UsersRoutes";
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -109,10 +112,25 @@ const Cart = lazy(() => import("./pages/other/Cart"));
 const Wishlist = lazy(() => import("./pages/other/Wishlist"));
 const Compare = lazy(() => import("./pages/other/Compare"));
 const Checkout = lazy(() => import("./pages/other/Checkout"));
-
 const NotFound = lazy(() => import("./pages/other/NotFound"));
 
 const App = () => {
+
+  useEffect(() => {
+
+    const checkName = Cookies.get("name");
+    const checkTID  = Cookies.get("TID");
+    if(!checkName && !checkTID){
+      Cookies.set('name', 'Welcome', { expires: 1 })
+      Cookies.set('TID', '', { expires: 1 })
+    }
+
+  }, [])
+  
+
+    
+
+
   return (
       <Router>
         <ScrollToTop>
@@ -127,6 +145,16 @@ const App = () => {
             }
           >
             <Routes>
+              
+              <Route
+                path={process.env.PUBLIC_URL + "/r"}
+                element={
+                <UserRoutes>
+                  <TestRouter />
+                </UserRoutes>
+              }
+              />
+             
               <Route
                 path={process.env.PUBLIC_URL + "/"}
                 element={<HomeCosmetics />}

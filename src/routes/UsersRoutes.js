@@ -1,10 +1,11 @@
+import Cookies from "js-cookie";
 import {Navigate, useLocation} from "react-router-dom";
 
 
 const UserRoutes = ({children}) => {
-    const user = '';
-    if(user){
-        return <Navigate to="/login" state={{ from: location}} replace />
+    
+    if(!Cookies.get("TID")){
+        return <Navigate to="/login-register" replace />
     }
     return children
 };

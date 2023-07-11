@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from "./App";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { store } from "./store/store";
 import PersistProvider from "./store/providers/persist-provider";
 import { setProducts } from "./store/slices/product-slice"
@@ -19,10 +20,12 @@ store.dispatch(setProducts(products));
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
+  <GoogleOAuthProvider clientId="920983269808-i5tjk4h12oimi0o6irfcjoapfqrdptst.apps.googleusercontent.com">
     <Provider store={store}>
       <PersistProvider>
         <App />
       </PersistProvider>
     </Provider>
+  </GoogleOAuthProvider>
 );
 
