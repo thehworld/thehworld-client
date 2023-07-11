@@ -24,6 +24,18 @@ export const userSignup = (user) => {
     })
 }
 
+export const userIsAuth = (token) => {
+    return axios.get(`${API_USE}/user/data`, {
+        headers: {
+            token: token
+        }
+    }).then((res) => {
+        return res
+    }).catch((err) => {
+        console.log(err);
+    });
+}
+
 
 // ?
 

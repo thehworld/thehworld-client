@@ -8,7 +8,7 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { useState } from "react";
 import jwt_decode from "jwt-decode";
-import { userSignup } from "../../apis/api";
+import { userIsAuth, userSignup } from "../../apis/api";
 import Cookies from "js-cookie";
 
 
@@ -38,6 +38,26 @@ const LoginRegister = () => {
     e.preventDefault();
 
   }
+
+
+  const checkUserIsAuth = async() => {
+    const token = await Cookies.get("TID");
+    if(token)
+    userIsAuth(token).then((res) => {  
+        console.log("User Res - ", res);
+        if(res.data.status && res.data.user){
+            navigate("/")
+        }
+
+    }).catch((error) => {
+        console.log("Error - ", error);
+    })
+  }
+
+  useEffect(() => {
+    checkUserIsAuth();
+  }, [])
+  
 
 
   const userAuthHere = (user) => {
