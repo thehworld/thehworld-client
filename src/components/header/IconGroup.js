@@ -1,8 +1,12 @@
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
 import MenuCart from "./sub-components/MenuCart";
+import { useEffect, useState } from "react";
+import { getUserDetails } from "../../apis/api";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 const IconGroup = ({ iconWhiteClass }) => {
   const handleClick = e => {
@@ -18,6 +22,53 @@ const IconGroup = ({ iconWhiteClass }) => {
   const { compareItems } = useSelector((state) => state.compare);
   const { wishlistItems } = useSelector((state) => state.wishlist);
   const { cartItems } = useSelector((state) => state.cart);
+
+
+  const navigate = useNavigate();
+
+  const [user, setuser] = useState([]);
+  const [userFirstName, setuserFirstName] = useState("");
+  const [userLastName, setuserLastName] = useState("");
+  const [userEmailId, setuserEmailId] = useState("");
+  const [userPhone, setuserPhone] = useState("");
+  const [userLocation, setuserLocation] = useState("");
+  
+
+  const [isLoading, setisLoading] = useState(false);
+
+  const getUserInformation = () => {
+    const token = Cookies.get('TID');
+    setisLoading(true);
+    if(token){
+      getUserDetails(token).then((res) => {
+          console.log("User Res - ", res);
+          setuser(res.data.user);
+          setuserFirstName(res.data.user.userName);
+          setuserLastName(res.data.user.userGoogleName);
+          setuserEmailId(res.data.user.userEmail);
+          setuserLocation("");
+          setisLoading(false);
+        }).catch((error) => {
+          console.log("Error - ", error);
+      })
+    }
+  }
+
+  const userLogout = (e) => {
+    e.preventDefault();
+    Cookies.remove('TID');
+    Cookies.remove('name');
+    toast("Miss you!!!");
+    navigate("/")
+
+  }
+
+
+  useEffect(() => {
+      getUserInformation()
+  }, [])
+
+
 
   return (
     <div className={clsx("header-right-wrap", iconWhiteClass)} >
@@ -43,19 +94,34 @@ const IconGroup = ({ iconWhiteClass }) => {
         </button>
         <div className="account-dropdown">
           <ul>
-            <li>
-              <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
+            {userFirstName ? (
+              <>
+              <li onClick={userLogout}>
+              <Link>Logout</Link>
             </li>
             <li>
-              <Link to={process.env.PUBLIC_URL + "/login-register"}>
-                Register
-              </Link>
-            </li>
+            <Link to={process.env.PUBLIC_URL + "/my-account"}>
+              my account
+            </Link>
+          </li>
+          </>
+            ) : (
+              <>
             <li>
-              <Link to={process.env.PUBLIC_URL + "/my-account"}>
-                my account
-              </Link>
-            </li>
+            <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
+          </li>  
+          <li>
+          <Link to={process.env.PUBLIC_URL + "/login-register"}>
+            Register
+          </Link>
+        </li>
+        </>
+            )
+
+            }
+            
+            
+            
           </ul>
         </div>
       </div>

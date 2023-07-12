@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getProductCartQuantity } from "../../helpers/product";
@@ -7,6 +7,9 @@ import Rating from "./sub-components/ProductRating";
 import { addToCart } from "../../store/slices/cart-slice";
 import { addToWishlist } from "../../store/slices/wishlist-slice";
 import { addToCompare } from "../../store/slices/compare-slice";
+import Cookies from "js-cookie";
+import { v4 as uuidv4 } from 'uuid';
+import { getUserDetails, userCartAddRemove } from "../../apis/api";
 
 const ProductDescriptionInfo = ({
   product,
@@ -18,6 +21,74 @@ const ProductDescriptionInfo = ({
   wishlistItem,
   compareItem,
 }) => {
+
+  const [userToken, setuserToken] = useState(Cookies.get("TID"))
+
+
+
+  const [cart, setcart] = useState([]);
+
+  const fetchCartData = () => {
+    const token = Cookies.get("TID");
+    if(token)
+    getUserDetails(token).then((res) => {
+          console.log("Res - ", res.data.user);
+          console.log("Cart - ", res.data.userCartqq);
+          setcart(res.data.userCart);
+    }).catch((err) => {
+          console.log("Error - ", err);
+    })
+  }
+
+  const [fetchProduct, setfetchProduct] = useState(false);
+
+
+  const addProductToCart = (e) => {
+    e.preventDefault();
+    console.log("Cart - ", cart === undefined);
+    if(cart === undefined){
+        console.log(cart);
+        const cartObject = {
+          id: product._id,
+          product: product,
+          qty: 1
+        }
+        userCartAddRemove(cartObject,"Add",userToken).then((res) => {
+          setfetchProduct(!fetchProduct)
+          console.log(res);
+        }).catch((error) => {
+          console.log("Error - ", error);
+        });
+    }  
+  }
+
+  const removeProductToCart = (e) => {
+      e.preventDefault();
+      console.log("Cart - ", cart === undefined);
+      if(cart === undefined){
+          console.log(cart);
+          const cartObject = {
+            id: product._id,
+            product: product,
+            qty: 1
+          }
+          userCartAddRemove(cartObject,"Rmv",userToken).then((res) => {
+            setfetchProduct(!fetchProduct)
+            console.log(res);
+          }).catch((error) => {
+            console.log("Error - ", error);
+          });
+      }
+    }
+
+
+
+
+  useEffect(() => {
+      fetchCartData()
+  }, [])
+  
+
 
   return (
     <div className="product-details-content ml-70">
@@ -46,15 +117,18 @@ const ProductDescriptionInfo = ({
       <div className="pro-details-list">
         <p>{product.productDescription}</p>
       </div>
-      <button>
+      <button onClick={(e) => addProductToCart(e, product)}>
         Add
       </button>
       <p>
       2
       </p>
-      <button>
+      <button onClick={(e) => removeProductToCart(e, product)}>
         Remove
       </button>
+      <div>
+
+      </div>
       {/* {product.variation ? (
         <div className="pro-details-size-color">
           <div className="pro-details-color-wrap">

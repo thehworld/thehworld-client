@@ -11,6 +11,33 @@ const API_USE = API_STAGING;
 const API_AUTH_USE = API_SAUTH;
 
 
+// ? User Details
+
+export const getUserDetails = (userToken) => {
+    return axios.get(`${API_USE}/user/data`, {
+        headers: {
+            token: userToken
+        }
+    }).then((res) => {
+        return res
+    }).catch((error) => {
+
+    });
+}
+
+// ? User Cart
+
+export const userCartAddRemove = (product, opt, token) => {
+    return axios.post(`${API_USE}/user/add/cart`, { product, opt }, {
+        headers: {
+            token: token
+        }
+    }).then((res) => {
+        return res
+    }).catch((err) => {
+        console.log("Error - ", err);
+    });
+}
 
 // ? User Auth
 
