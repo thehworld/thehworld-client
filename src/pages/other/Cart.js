@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import SEO from "../../components/seo";
@@ -7,6 +7,8 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { addToCart, decreaseQuantity, deleteFromCart, deleteAllFromCart } from "../../store/slices/cart-slice";
 import { cartItemStock } from "../../helpers/product";
+import { getUserDetails } from "../../apis/api";
+import Cookies from "js-cookie";
 
 const Cart = () => {
   let cartTotalPrice = 0;
@@ -15,8 +17,41 @@ const Cart = () => {
   const dispatch = useDispatch();
   let { pathname } = useLocation();
   
-  const currency = useSelector((state) => state.currency);
-  const { cartItems } = useSelector((state) => state.cart);
+
+
+
+
+  
+  const [userToken, setuserToken] = useState(Cookies.get("TID"))
+
+
+
+  const getDiscountPrice = (price, discount) => {
+    return discount && discount > 0 ? price - price * (discount / 100) : null;
+  };
+  
+
+  const [cartItems, setcart] = useState([]);
+  const [cartspecific, setcartspecific] = useState(0);
+
+  const fetchCartData = () => {
+    const token = Cookies.get("TID");
+    if(token)
+    getUserDetails(token).then((res) => {
+          console.log("Res - ", res.data);
+          console.log("Cart - ", res.data.user.userCart);
+          setcart(res.data.user.userCart);
+          
+    }).catch((err) => {
+          console.log("Error - ", err);
+    })
+  }
+
+
+  useEffect(() => {
+      fetchCartData()
+  }, [])
+  
 
   return (
     <Fragment>
@@ -33,6 +68,7 @@ const Cart = () => {
             {label: "Cart", path: process.env.PUBLIC_URL + pathname }
           ]} 
         />
+        {console.log("Here Cart - ", cartItems)}
         <div className="cart-main-area pt-90 pb-100">
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (
@@ -54,22 +90,12 @@ const Cart = () => {
                         </thead>
                         <tbody>
                           {cartItems.map((cartItem, key) => {
-                            const discountedPrice = getDiscountPrice(
-                              cartItem.price,
-                              cartItem.discount
-                            );
-                            const finalProductPrice = (
-                              cartItem.price * currency.currencyRate
-                            ).toFixed(2);
-                            const finalDiscountedPrice = (
-                              discountedPrice * currency.currencyRate
-                            ).toFixed(2);
 
-                            discountedPrice != null
+                            cartItem.product.productDiscountPrice != null
                               ? (cartTotalPrice +=
-                                  finalDiscountedPrice * cartItem.quantity)
+                                cartItem.product.productDiscountPrice * cartItem.qty)
                               : (cartTotalPrice +=
-                                  finalProductPrice * cartItem.quantity);
+                                  cartItem.product.productPrice * cartItem.qty);
                             return (
                               <tr key={key}>
                                 <td className="product-thumbnail">
@@ -77,14 +103,14 @@ const Cart = () => {
                                     to={
                                       process.env.PUBLIC_URL +
                                       "/product/" +
-                                      cartItem.id
+                                      cartItem.product._id
                                     }
                                   >
                                     <img
                                       className="img-fluid"
                                       src={
                                         process.env.PUBLIC_URL +
-                                        cartItem.image[0]
+                                        cartItem.product.productImages[0]
                                       }
                                       alt=""
                                     />
@@ -96,42 +122,30 @@ const Cart = () => {
                                     to={
                                       process.env.PUBLIC_URL +
                                       "/product/" +
-                                      cartItem.id
+                                      cartItem.product._id
                                     }
                                   >
-                                    {cartItem.name}
+                                  {cartItem.product.productName}
                                   </Link>
-                                  {cartItem.selectedProductColor &&
-                                  cartItem.selectedProductSize ? (
-                                    <div className="cart-item-variation">
-                                      <span>
-                                        Color: {cartItem.selectedProductColor}
-                                      </span>
-                                      <span>
-                                        Size: {cartItem.selectedProductSize}
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
+                                  
                                 </td>
 
                                 <td className="product-price-cart">
-                                  {discountedPrice !== null ? (
+                                  {cartItem.product.productDiscountPrice !== null ? (
                                     <Fragment>
                                       <span className="amount old">
                                         {"₹" +
-                                          finalProductPrice}
+                                          cartItem.product.productDiscountPrice}
                                       </span>
                                       <span className="amount">
                                         {"₹" +
-                                          finalDiscountedPrice}
+                                          cartItem.product.productDiscountPrice}
                                       </span>
                                     </Fragment>
                                   ) : (
                                     <span className="amount">
                                       {"₹" +
-                                        finalProductPrice}
+                                        cartItem.product.productDiscountPrice}
                                     </span>
                                   )}
                                 </td>
@@ -140,58 +154,39 @@ const Cart = () => {
                                   <div className="cart-plus-minus">
                                     <button
                                       className="dec qtybutton"
-                                      onClick={() =>
-                                        dispatch(decreaseQuantity(cartItem))
-                                      }
+                                     
                                     >
                                       -
                                     </button>
                                     <input
                                       className="cart-plus-minus-box"
                                       type="text"
-                                      value={cartItem.quantity}
+                                      value={cartItem.qty}
                                       readOnly
                                     />
                                     <button
                                       className="inc qtybutton"
-                                      onClick={() =>
-                                        dispatch(addToCart({
-                                          ...cartItem,
-                                          quantity: quantityCount
-                                        }))
-                                      }
-                                      disabled={
-                                        cartItem !== undefined &&
-                                        cartItem.quantity &&
-                                        cartItem.quantity >=
-                                          cartItemStock(
-                                            cartItem,
-                                            cartItem.selectedProductColor,
-                                            cartItem.selectedProductSize
-                                          )
-                                      }
+                                      
                                     >
                                       +
                                     </button>
                                   </div>
                                 </td>
                                 <td className="product-subtotal">
-                                  {discountedPrice !== null
+                                  {cartItem.product.productDiscountPrice !== null
                                     ? "₹" +
                                       (
-                                        finalDiscountedPrice * cartItem.quantity
+                                        cartItem.product.productDiscountPrice * cartItem.qty
                                       ).toFixed(2)
                                     : "₹" +
                                       (
-                                        finalProductPrice * cartItem.quantity
+                                        cartItem.product.productDiscountPrice * cartItem.qty
                                       ).toFixed(2)}
                                 </td>
 
                                 <td className="product-remove">
                                   <button
-                                    onClick={() =>
-                                      dispatch(deleteFromCart(cartItem.cartItemId))
-                                    }
+                                    
                                   >
                                     <i className="fa fa-times"></i>
                                   </button>

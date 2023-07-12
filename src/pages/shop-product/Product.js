@@ -68,10 +68,10 @@ const Product = () => {
         </p>
 
         {/* product description tab */}
-        {/* <ProductDescriptionTab
+        <ProductDescriptionTab
           spaceBottomClass="pb-90"
-          productFullDesc={product.productDescription}
-        /> */}
+          productFullDesc={productData}
+        />
 
    
       </LayoutOne>

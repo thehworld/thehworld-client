@@ -33,6 +33,7 @@ const IconGroup = ({ iconWhiteClass }) => {
   const [userPhone, setuserPhone] = useState("");
   const [userLocation, setuserLocation] = useState("");
   
+  const [cart, setcart] = useState([]);
 
   const [isLoading, setisLoading] = useState(false);
 
@@ -41,12 +42,12 @@ const IconGroup = ({ iconWhiteClass }) => {
     setisLoading(true);
     if(token){
       getUserDetails(token).then((res) => {
-          console.log("User Res - ", res);
           setuser(res.data.user);
           setuserFirstName(res.data.user.userName);
           setuserLastName(res.data.user.userGoogleName);
           setuserEmailId(res.data.user.userEmail);
           setuserLocation("");
+          setcart(res.data.user.userCart);
           setisLoading(false);
         }).catch((error) => {
           console.log("Error - ", error);
@@ -142,23 +143,32 @@ const IconGroup = ({ iconWhiteClass }) => {
         </Link>
       </div>
       <div className="same-style cart-wrap d-none d-lg-block">
-        <button className="icon-cart" onClick={e => handleClick(e)}>
+      <Link className="icon-cart" to={process.env.PUBLIC_URL + "/cart"}>
+
+        <button className="icon-cart">
           <i className="pe-7s-shopbag" />
           <span className="count-style">
-            {cartItems && cartItems.length ? cartItems.length : 0}
+            {cart && cart.length ? cart.length : 0}
           </span>
         </button>
-        {/* menu cart */}
-        <MenuCart />
-      </div>
-      <div className="same-style cart-wrap d-block d-lg-none">
-        <Link className="icon-cart" to={process.env.PUBLIC_URL + "/cart"}>
-          <i className="pe-7s-shopbag" />
-          <span className="count-style">
-            {cartItems && cartItems.length ? cartItems.length : 0}
-          </span>
         </Link>
+        {/* <MenuCart /> */}
       </div>
+      {cart.length > 0 ? (
+          <div className="same-style cart-wrap d-block d-lg-none">
+            <Link className="icon-cart" to={process.env.PUBLIC_URL + "/cart"}>
+              <i className="pe-7s-shopbag" />
+              <span className="count-style">
+              {cart && cart.length ? cart.length : 0}
+              </span>
+            </Link>
+          </div>
+      ) : (
+          null
+      )
+
+      }
+      
       <div className="same-style mobile-off-canvas d-block d-lg-none">
         <button
           className="mobile-aside-button"

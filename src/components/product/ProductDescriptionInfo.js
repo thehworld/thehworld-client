@@ -27,14 +27,17 @@ const ProductDescriptionInfo = ({
 
 
   const [cart, setcart] = useState([]);
+  const [cartspecific, setcartspecific] = useState(0);
 
   const fetchCartData = () => {
     const token = Cookies.get("TID");
     if(token)
     getUserDetails(token).then((res) => {
-          console.log("Res - ", res.data.user);
-          console.log("Cart - ", res.data.userCartqq);
-          setcart(res.data.userCart);
+          console.log("Res - ", res.data);
+          console.log("Cart - ", res.data.user.userCart);
+          setcart(res.data.user.userCart);
+          const qty = res.data.user.userCart.filter((p) => p.id === product._id);
+          setcartspecific(qty[0].qty);
     }).catch((err) => {
           console.log("Error - ", err);
     })
@@ -43,10 +46,11 @@ const ProductDescriptionInfo = ({
   const [fetchProduct, setfetchProduct] = useState(false);
 
 
+  const [isLoading, setisLoading] = useState(false);
   const addProductToCart = (e) => {
     e.preventDefault();
+    setisLoading(true);
     console.log("Cart - ", cart === undefined);
-    if(cart === undefined){
         console.log(cart);
         const cartObject = {
           id: product._id,
@@ -56,16 +60,16 @@ const ProductDescriptionInfo = ({
         userCartAddRemove(cartObject,"Add",userToken).then((res) => {
           setfetchProduct(!fetchProduct)
           console.log(res);
+          setisLoading(false);
         }).catch((error) => {
           console.log("Error - ", error);
         });
-    }  
   }
 
   const removeProductToCart = (e) => {
       e.preventDefault();
+      setisLoading(true);
       console.log("Cart - ", cart === undefined);
-      if(cart === undefined){
           console.log(cart);
           const cartObject = {
             id: product._id,
@@ -75,10 +79,10 @@ const ProductDescriptionInfo = ({
           userCartAddRemove(cartObject,"Rmv",userToken).then((res) => {
             setfetchProduct(!fetchProduct)
             console.log(res);
+            setisLoading(false);
           }).catch((error) => {
             console.log("Error - ", error);
           });
-      }
     }
 
 
@@ -86,7 +90,7 @@ const ProductDescriptionInfo = ({
 
   useEffect(() => {
       fetchCartData()
-  }, [])
+  }, [fetchProduct])
   
 
 
@@ -117,15 +121,22 @@ const ProductDescriptionInfo = ({
       <div className="pro-details-list">
         <p>{product.productDescription}</p>
       </div>
-      <button onClick={(e) => addProductToCart(e, product)}>
+      {isLoading ? (<p>Loading Hai</p>) : (
+        <>
+         <button onClick={(e) => addProductToCart(e, product)}>
         Add
       </button>
       <p>
-      2
+      {cartspecific}
       </p>
       <button onClick={(e) => removeProductToCart(e, product)}>
         Remove
       </button>
+      </>
+      )
+
+      }
+     
       <div>
 
       </div>

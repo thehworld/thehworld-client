@@ -19,7 +19,7 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
                 <Nav.Link eventKey="productDescription">Description</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="productReviews">Reviews(2)</Nav.Link>
+                <Nav.Link eventKey="productReviews">Reviews</Nav.Link>
               </Nav.Item>
             </Nav>
             <Tab.Content className="description-review-bottom">
@@ -43,7 +43,7 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
                 </div>
               </Tab.Pane>
               <Tab.Pane eventKey="productDescription">
-                {productFullDesc}
+                {productFullDesc.productDescription}
               </Tab.Pane>
               <Tab.Pane eventKey="productReviews">
                 <div className="row">
