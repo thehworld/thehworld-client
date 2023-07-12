@@ -46,7 +46,15 @@ const ProductDescriptionInfo = ({
       <div className="pro-details-list">
         <p>{product.productDescription}</p>
       </div>
-
+      <button>
+        Add
+      </button>
+      <p>
+      2
+      </p>
+      <button>
+        Remove
+      </button>
       {/* {product.variation ? (
         <div className="pro-details-size-color">
           <div className="pro-details-color-wrap">

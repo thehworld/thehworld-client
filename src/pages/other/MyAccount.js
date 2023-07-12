@@ -1,4 +1,4 @@
-import { Fragment } from "react"; 
+import { Fragment, useEffect } from "react"; 
 import { useLocation } from "react-router-dom"; 
 import Accordion from "react-bootstrap/Accordion";
 import SEO from "../../components/seo";
@@ -7,6 +7,17 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 
 const MyAccount = () => {
   let { pathname } = useLocation();
+
+
+  const getUserInformation = () => {
+
+  }
+
+
+  useEffect(() => {
+      getUserInformation()
+  }, [])
+  
 
   return (
     <Fragment>
