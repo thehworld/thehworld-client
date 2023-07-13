@@ -1,19 +1,96 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getDiscountPrice } from "../../helpers/product";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import { getUserDetails } from "../../apis/api";
+import Cookies from "js-cookie";
 
 const Checkout = () => {
-  let cartTotalPrice = 0;
 
-  let { pathname } = useLocation();
-  const currency = useSelector((state) => state.currency);
-  const { cartItems } = useSelector((state) => state.cart);
+
+
+
+
+  
+  const [userToken, setuserToken] = useState(Cookies.get("TID"))
+
+
+  
+  const [user, setuser] = useState([]);
+  const [userFirstName, setuserFirstName] = useState("");
+  const [userLastName, setuserLastName] = useState("");
+  const [userEmailId, setuserEmailId] = useState("");
+  const [userPhone, setuserPhone] = useState("");
+  const [userLocation, setuserLocation] = useState("");
+  const [userState, setuserState] = useState("");
+  const [userAddress, setuserAddress] = useState("");
+  const [userAddressTwo, setuserAddressTwo] = useState("");
+  const [userPostalCode, setuserPostalCode] = useState("");
+  const [userOrderNotes, setuserOrderNotes] = useState("");
+
+  const [isLoading, setisLoading] = useState(false);
+
+  const getUserInformation = () => {
+    const token = Cookies.get('TID');
+    setisLoading(true);
+    if(token){
+      getUserDetails(token).then((res) => {
+          console.log("User Res - ", res);
+          setuser(res.data.user);
+          setuserFirstName(res.data.user.userName);
+          setuserLastName(res.data.user.userGoogleName);
+          setuserEmailId(res.data.user.userEmail);
+          setuserLocation("");
+          setisLoading(false);
+        }).catch((error) => {
+          console.log("Error - ", error);
+      })
+    }
+  }
+
+
+  useEffect(() => {
+      getUserInformation()
+  }, [])
+  
+
+
+  const getDiscountPrice = (price, discount) => {
+    return discount && discount > 0 ? price - price * (discount / 100) : null;
+  };
+  
+
+  const [cartItems, setcart] = useState([]);
+  const [cartspecific, setcartspecific] = useState(0);
+
+  const fetchCartData = () => {
+    const token = Cookies.get("TID");
+    if(token)
+    getUserDetails(token).then((res) => {
+          console.log("Res - ", res.data);
+          console.log("Cart - ", res.data.user.userCart);
+          setcart(res.data.user.userCart);
+          
+    }).catch((err) => {
+          console.log("Error - ", err);
+    })
+  }
+
+
+  useEffect(() => {
+      fetchCartData()
+  }, [])
+  
+  
+  let cartTotalPrice = 0;
+  
+
 
   return (
+    
     <Fragment>
       <SEO
         titleTemplate="Checkout"
@@ -24,7 +101,7 @@ const Checkout = () => {
         <Breadcrumb 
           pages={[
             {label: "Home", path: process.env.PUBLIC_URL + "/" },
-            {label: "Checkout", path: process.env.PUBLIC_URL + pathname }
+            {label: "Checkout", path: process.env.PUBLIC_URL + "/chekout" }
           ]} 
         />
         <div className="checkout-area pt-95 pb-100">
@@ -38,43 +115,33 @@ const Checkout = () => {
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>First Name</label>
-                          <input type="text" />
+                          <input value={userFirstName} onChange={(e) => setuserFirstName(e.target.value)} type="text" />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Last Name</label>
-                          <input type="text" />
+                          <input type="text" value={userLastName} onChange={(e) => setuserLastName(e.target.value)}/>
                         </div>
                       </div>
                       <div className="col-lg-12">
                         <div className="billing-info mb-20">
-                          <label>Company Name</label>
-                          <input type="text" />
+                          <label>Phone Number</label>
+                          <input type="text" value={userPhone} onChange={(e) => setuserPhone(e.target.value)}/>
                         </div>
                       </div>
-                      <div className="col-lg-12">
-                        <div className="billing-select mb-20">
-                          <label>Country</label>
-                          <select>
-                            <option>Select a country</option>
-                            <option>Azerbaijan</option>
-                            <option>Bahamas</option>
-                            <option>Bahrain</option>
-                            <option>Bangladesh</option>
-                            <option>Barbados</option>
-                          </select>
-                        </div>
-                      </div>
+                     
                       <div className="col-lg-12">
                         <div className="billing-info mb-20">
                           <label>Street Address</label>
                           <input
+                            value={userAddress} onChange={(e) => setuserAddress(e.target.value)}
                             className="billing-address"
                             placeholder="House number and street name"
                             type="text"
                           />
                           <input
+
                             placeholder="Apartment, suite, unit etc."
                             type="text"
                           />
@@ -87,9 +154,17 @@ const Checkout = () => {
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
-                        <div className="billing-info mb-20">
-                          <label>State / County</label>
-                          <input type="text" />
+                      <div className="billing-select mb-20">
+                          <label>State</label>
+                          <select value={userState} onChange={(e) => setuserState(e.target.value)}>
+                            <option>Select a state</option>
+                            <option>Tamil Nadu</option>
+                            <option>Kerala</option>
+                            <option>Karnataka</option>
+                            <option>Gujarat</option>
+                            <option>Uttar Pradesh</option>
+                            <option>Rajasthan</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
@@ -100,14 +175,14 @@ const Checkout = () => {
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
-                          <label>Phone</label>
+                          <label>Whatsapp Phone</label>
                           <input type="text" />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Email Address</label>
-                          <input type="text" />
+                          <input type="text" value={userEmailId} onChange={(e) => setuserEmailId(e.target.value)}/>
                         </div>
                       </div>
                     </div>
@@ -140,37 +215,26 @@ const Checkout = () => {
                         <div className="your-order-middle">
                           <ul>
                             {cartItems.map((cartItem, key) => {
-                              const discountedPrice = getDiscountPrice(
-                                cartItem.price,
-                                cartItem.discount
-                              );
-                              const finalProductPrice = (
-                                cartItem.price * currency.currencyRate
-                              ).toFixed(2);
-                              const finalDiscountedPrice = (
-                                discountedPrice * currency.currencyRate
-                              ).toFixed(2);
-
-                              discountedPrice != null
-                                ? (cartTotalPrice +=
-                                    finalDiscountedPrice * cartItem.quantity)
-                                : (cartTotalPrice +=
-                                    finalProductPrice * cartItem.quantity);
+                             cartItem.product.productDiscountPrice != null
+                             ? (cartTotalPrice +=
+                               cartItem.product.productDiscountPrice * cartItem.qty)
+                             : (cartTotalPrice +=
+                                 cartItem.product.productPrice * cartItem.qty);
                               return (
                                 <li key={key}>
                                   <span className="order-middle-left">
-                                    {cartItem.name} X {cartItem.quantity}
+                                    {cartItem.product.productName} X {cartItem.qty}
                                   </span>{" "}
                                   <span className="order-price">
-                                    {discountedPrice !== null
+                                    {cartItem.product.productDiscountPrice !== null
                                       ? "₹" +
                                         (
-                                          finalDiscountedPrice *
-                                          cartItem.quantity
+                                          cartItem.product.productDiscountPrice *
+                                          cartItem.qty
                                         ).toFixed(2)
                                       : "₹" +
                                         (
-                                          finalProductPrice * cartItem.quantity
+                                          cartItem.product.productDiscountPrice * cartItem.qty
                                         ).toFixed(2)}
                                   </span>
                                 </li>
@@ -181,16 +245,25 @@ const Checkout = () => {
                         <div className="your-order-bottom">
                           <ul>
                             <li className="your-order-shipping">Shipping</li>
-                            <li>Free shipping</li>
+                            <li>100</li>
+                          </ul>
+                        </div>
+                        <div className="your-order-total">
+                          <ul>
+                            <li className="order-total">Sub Total</li>
+                            {cartTotalPrice.toFixed(2)}
+                          </ul>
+                        </div>
+                        <div className="your-order-bottom">
+                          <ul>
+                            <li className="your-order-shipping">GST</li>
+                            <li>{cartTotalPrice * 0.18}</li>
                           </ul>
                         </div>
                         <div className="your-order-total">
                           <ul>
                             <li className="order-total">Total</li>
-                            <li>
-                              {"₹" +
-                                cartTotalPrice.toFixed(2)}
-                            </li>
+                            {cartTotalPrice + (cartTotalPrice * 0.18)}
                           </ul>
                         </div>
                       </div>

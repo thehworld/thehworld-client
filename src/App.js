@@ -439,7 +439,11 @@ const App = () => {
 
               <Route
                 path={process.env.PUBLIC_URL + "/cart"}
-                element={<Cart/>}
+                element={
+                <UserRoutes>
+                  <Cart/>
+                </UserRoutes>
+                }
               />
               <Route
                 path={process.env.PUBLIC_URL + "/wishlist"}
