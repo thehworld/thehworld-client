@@ -2,12 +2,12 @@ import axios from "axios";
 
 
 const API_AUTH = "https://thehworld-v1.onrender.com"
-const API_TESTING = "https://thehworld-v1.onrender.com/api/web";
+const API_TESTING = "https://thehworld-service-commerce.onrender.com/api/web";
 const API_SAUTH = "http://localhost:8080";
 const API_STAGING = "http://localhost:8080/api/web";
 
 
-const API_USE = API_STAGING;
+const API_USE = API_TESTING;
 const API_AUTH_USE = API_SAUTH;
 
 

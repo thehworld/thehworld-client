@@ -88,6 +88,12 @@ const Checkout = () => {
   let cartTotalPrice = 0;
   
 
+  const placeOrder = (e) => {
+      e.preventDefault();
+      
+  }
+
+
 
   return (
     
@@ -270,7 +276,7 @@ const Checkout = () => {
                       <div className="payment-method"></div>
                     </div>
                     <div className="place-order mt-25">
-                      <button className="btn-hover">Place Order</button>
+                      <button className="btn-hover" onClick={(e) => placeOrder(e)}>Place Order</button>
                     </div>
                   </div>
                 </div>

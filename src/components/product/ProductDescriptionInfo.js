@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getProductCartQuantity } from "../../helpers/product";
 import Rating from "./sub-components/ProductRating";
@@ -29,11 +29,18 @@ const ProductDescriptionInfo = ({
   const [cart, setcart] = useState([]);
   const [cartspecific, setcartspecific] = useState(0);
 
+  const navigate = useNavigate();
+
+
   const fetchCartData = () => {
     const token = Cookies.get("TID");
     if(token)
     getUserDetails(token).then((res) => {
           console.log("Res - ", res.data);
+          if(!res.data.status){
+            navigate("/login-register")
+          }
+
           console.log("Cart - ", res.data.user.userCart);
           setcart(res.data.user.userCart);
           const qty = res.data.user.userCart.filter((p) => p.id === product._id);
@@ -50,25 +57,34 @@ const ProductDescriptionInfo = ({
   const addProductToCart = (e) => {
     e.preventDefault();
     setisLoading(true);
-    console.log("Cart - ", cart === undefined);
-        console.log(cart);
-        const cartObject = {
-          id: product._id,
-          product: product,
-          qty: 1
-        }
-        userCartAddRemove(cartObject,"Add",userToken).then((res) => {
-          setfetchProduct(!fetchProduct)
-          console.log(res);
-          setisLoading(false);
-        }).catch((error) => {
-          console.log("Error - ", error);
-        });
+    const token = Cookies.get("TID");
+    if(token){
+      console.log("Cart - ", cart === undefined);
+      console.log(cart);
+      const cartObject = {
+        id: product._id,
+        product: product,
+        qty: 1
+      }
+      userCartAddRemove(cartObject,"Add",userToken).then((res) => {
+        setfetchProduct(!fetchProduct)
+        console.log(res);
+        setisLoading(false);
+      }).catch((error) => {
+        console.log("Error - ", error);
+      });
+    }
+    else{
+        navigate("/login-register");
+    }
   }
 
   const removeProductToCart = (e) => {
       e.preventDefault();
       setisLoading(true);
+    const token = Cookies.get("TID");
+
+      if(token){
       console.log("Cart - ", cart === undefined);
           console.log(cart);
           const cartObject = {
@@ -83,6 +99,10 @@ const ProductDescriptionInfo = ({
           }).catch((error) => {
             console.log("Error - ", error);
           });
+        }
+          else{
+            navigate("/login-register");
+        }
     }
 
 
