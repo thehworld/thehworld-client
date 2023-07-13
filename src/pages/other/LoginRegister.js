@@ -61,6 +61,7 @@ const LoginRegister = () => {
 
 
   const userAuthHere = (user) => {
+    console.log("User on: ", user);
     if(!user){
       return 1;
     }

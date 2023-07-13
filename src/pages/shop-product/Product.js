@@ -19,8 +19,8 @@ const Product = () => {
   const [productData, setproductData] = useState(null);
 
   const getProductDetailsFromId = () => {
-    console.log('id -> ',id);
     if(id){
+      console.log('id -> ',id);
       getAProductDetail(id).then((res) => {
         console.log("Product res- ", res.data.product);
         setproductData(res.data.product);
@@ -34,7 +34,7 @@ const Product = () => {
   useEffect(() => {
     if(id)
     getProductDetailsFromId();
-  }, [])
+  }, [id])
   
   if(productData)
   return (

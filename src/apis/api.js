@@ -7,7 +7,7 @@ const API_SAUTH = "http://localhost:8080";
 const API_STAGING = "http://localhost:8080/api/web";
 
 
-const API_USE = API_TESTING;
+const API_USE = API_STAGING;
 const API_AUTH_USE = API_SAUTH;
 
 
@@ -95,7 +95,7 @@ export const getAProductDetail = (productId) => {
 
 
 export const getAllCategories = () => {
-    return axios.get(`${API_USE}/get/all/categories`, { withCredentials: true })
+    return axios.get(`${API_USE}/get/all/categories`)
         .then((res) => {
             console.log("Category - ", res);
             return res.data.category;
@@ -106,7 +106,7 @@ export const getAllCategories = () => {
 
 
 export const getAllProductsFromCategory = (cateId) => {
-    return axios.get(`${API_USE}/get/all/products/category/${cateId}`, { withCredentials: true })
+    return axios.get(`${API_USE}/get/all/products/category/${cateId}`)
         .then((res) => {
             return res.data.product
         }).catch((err) => {
