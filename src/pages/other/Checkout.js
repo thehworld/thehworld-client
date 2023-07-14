@@ -5,7 +5,7 @@ import { getDiscountPrice } from "../../helpers/product";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import { getUserDetails } from "../../apis/api";
+import { getUserDetails, userOrderProductFromCart } from "../../apis/api";
 import Cookies from "js-cookie";
 
 const Checkout = () => {
@@ -24,9 +24,13 @@ const Checkout = () => {
   const [userLastName, setuserLastName] = useState("");
   const [userEmailId, setuserEmailId] = useState("");
   const [userPhone, setuserPhone] = useState("");
+  const [userWAPhone, setuserWAPhone] = useState("");
   const [userLocation, setuserLocation] = useState("");
   const [userState, setuserState] = useState("");
   const [userAddress, setuserAddress] = useState("");
+  const [userPincode, setuserPincode] = useState("");
+  const [userOrderNote, setuserOrderNote] = useState("");
+  const [userCityTown, setuserCityTown] = useState("");
   const [userAddressTwo, setuserAddressTwo] = useState("");
   const [userPostalCode, setuserPostalCode] = useState("");
   const [userOrderNotes, setuserOrderNotes] = useState("");
@@ -90,7 +94,33 @@ const Checkout = () => {
 
   const placeOrder = (e) => {
       e.preventDefault();
-      
+      const token = Cookies.get("TID");
+      // if(token)
+      // userOrderProductFromCart(,);
+      const data = {
+            userFirstName,
+            userLastName,
+            userEmailId,
+            userPhone,
+            userWAPhone,
+            userLocation,
+            userState,
+            userAddress,
+            userPincode,
+            userOrderNote,
+            userCityTown,
+            userAddressTwo,
+            userPostalCode,
+            userOrderNotes
+      }
+      if(token){
+        userOrderProductFromCart(data, token).then((res) => {
+          console.log("Res - ", res);
+        }).catch((error) => {
+            console.log("Error - ", error);
+        })
+      }
+    
   }
 
 
@@ -147,7 +177,7 @@ const Checkout = () => {
                             type="text"
                           />
                           <input
-
+                            value={userAddressTwo} onChange={(e) => setuserAddressTwo(e.target.value)}
                             placeholder="Apartment, suite, unit etc."
                             type="text"
                           />
@@ -156,7 +186,7 @@ const Checkout = () => {
                       <div className="col-lg-12">
                         <div className="billing-info mb-20">
                           <label>Town / City</label>
-                          <input type="text" />
+                          <input type="text" value={userCityTown} onChange={(e) => setuserCityTown(e.target.value) } />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
@@ -176,13 +206,13 @@ const Checkout = () => {
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Postcode / ZIP</label>
-                          <input type="text" />
+                          <input type="text" value={userPincode} onChange={(e) => setuserPincode(e.target.value)} />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Whatsapp Phone</label>
-                          <input type="text" />
+                          <input type="number" value={userWAPhone} onChange={(e) => setuserWAPhone(e.target.value)}  />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
@@ -198,9 +228,11 @@ const Checkout = () => {
                       <div className="additional-info">
                         <label>Order notes</label>
                         <textarea
-                          placeholder="Notes about your order, e.g. special notes for delivery. "
+                          placeholder="Order notes"
                           name="message"
                           defaultValue={""}
+                          value={userOrderNote}
+                          onChange={(e) => setuserOrderNote(e.target.value)}
                         />
                       </div>
                     </div>
