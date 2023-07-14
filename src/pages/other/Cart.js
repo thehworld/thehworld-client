@@ -274,7 +274,7 @@ const Cart = () => {
                         <p>Enter your coupon code if you have one.</p>
                         <form>
                           <input type="text" required name="name" />
-                          <button className="cart-btn-2" type="submit">
+                          <button className="cart-btn-2" type="submit" onClick={() => window.location.replace("https://google.in")}>
                             Apply Coupon
                           </button>
                         </form>

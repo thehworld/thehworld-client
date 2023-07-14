@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getDiscountPrice } from "../../helpers/product";
 import SEO from "../../components/seo";
@@ -13,7 +13,7 @@ const Checkout = () => {
 
 
 
-
+  const navigate = useNavigate();
   
   const [userToken, setuserToken] = useState(Cookies.get("TID"))
 
@@ -34,6 +34,16 @@ const Checkout = () => {
   const [userAddressTwo, setuserAddressTwo] = useState("");
   const [userPostalCode, setuserPostalCode] = useState("");
   const [userOrderNotes, setuserOrderNotes] = useState("");
+  const [userOrderProduct, setuserOrderProduct] = useState([]);
+
+
+  const [userOrderSubTotal, setuserOrderSubTotal] = useState("");
+  const [userOrderGrandTotal, setuserOrderGrandTotal] = useState("");
+  const [userOrderisOffer, setuserOrderisOffer] = useState("");
+
+
+  
+
 
   const [isLoading, setisLoading] = useState(false);
 
@@ -77,6 +87,7 @@ const Checkout = () => {
           console.log("Res - ", res.data);
           console.log("Cart - ", res.data.user.userCart);
           setcart(res.data.user.userCart);
+          setuserOrderProduct(res.data.user.userCart);
           
     }).catch((err) => {
           console.log("Error - ", err);
@@ -92,11 +103,31 @@ const Checkout = () => {
   let cartTotalPrice = 0;
   
 
+  useEffect(() => {
+    let cartTotalPrice = 0;
+    let cartSubTotalPrice = 0;
+    cartItems.map((cartItem, index) => {
+      cartTotalPrice += cartItem.product.productPrice * cartItem.qty
+      cartSubTotalPrice += cartItem.product.productDiscountPrice * cartItem.qty
+    });
+    setuserOrderGrandTotal(cartTotalPrice);
+    setuserOrderSubTotal(cartSubTotalPrice);
+  }, [])
+  
+
   const placeOrder = (e) => {
       e.preventDefault();
       const token = Cookies.get("TID");
       // if(token)
       // userOrderProductFromCart(,);
+      let cartTotalPrice = 0;
+      let cartSubTotalPrice = 0;
+      cartItems.map((cartItem, index) => {
+        cartTotalPrice += cartItem.product.productPrice * cartItem.qty
+        cartSubTotalPrice += cartItem.product.productDiscountPrice * cartItem.qty
+      });
+      setuserOrderGrandTotal(cartTotalPrice);
+      setuserOrderSubTotal(cartSubTotalPrice);
       const data = {
             userFirstName,
             userLastName,
@@ -110,12 +141,20 @@ const Checkout = () => {
             userOrderNote,
             userCityTown,
             userAddressTwo,
-            userPostalCode,
-            userOrderNotes
+            userOrderSubTotal :cartSubTotalPrice,
+            userOrderGrandTotal: cartTotalPrice,
+            userOrderisOffer,
+            userOrderProduct
       }
+      console.log(data);
       if(token){
         userOrderProductFromCart(data, token).then((res) => {
           console.log("Res - ", res);
+          if(res.data){
+            console.log(res.data);
+            // navigate(res.data);
+            window.location.replace(res.data.paymentObject.data.instrumentResponse.redirectInfo.url);
+          }
         }).catch((error) => {
             console.log("Error - ", error);
         })
