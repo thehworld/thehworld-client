@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import React, { Fragment, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import Button from '@mui/material/Button';
+import { green } from '@mui/material/colors';
 import { getProductCartQuantity } from "../../helpers/product";
 import Rating from "./sub-components/ProductRating";
 import { addToCart } from "../../store/slices/cart-slice";
@@ -10,6 +12,9 @@ import { addToCompare } from "../../store/slices/compare-slice";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
 import { getUserDetails, userCartAddRemove } from "../../apis/api";
+import { Box, Typography } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 const ProductDescriptionInfo = ({
   product,
@@ -141,24 +146,106 @@ const ProductDescriptionInfo = ({
       <div className="pro-details-list">
         <p>{product.productDescription}</p>
       </div>
-      {isLoading ? (<p>Loading Hai</p>) : (
+
+      {isLoading ? (<p style={{
+        textAlign:"center"
+      }}>....</p>) : (
         <>
-         <button onClick={(e) => addProductToCart(e, product)}>
-        Add
-      </button>
-      <p>
+        
+      <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        borderRadius: '8px',
+      }}
+    >
+ <Button
+      onClick={(e) => addProductToCart(e, product)}
+        style={{
+          marginTop:5,
+          width:'80%',
+          borderRadius:1000,
+          justifyContent:'center',
+          alignItems:'center',
+          textAlign:'center'
+        }}
+        variant="contained"
+        sx={{ bgcolor: green[500], '&:hover': { bgcolor: green[700] } }}
+      >
+            <AddIcon />
+        </Button>
+
+
+    </Box>
+     
+      <p style={{
+        textAlign:'center'
+      }}>
       {cartspecific}
       </p>
-      <button onClick={(e) => removeProductToCart(e, product)}>
-        Remove
-      </button>
+      <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        borderRadius: '8px',
+      }}
+    >
+<Button
+      onClick={(e) => removeProductToCart(e, product)}
+        style={{
+          marginTop:2,
+          width:'80%',
+          borderRadius:1000,
+          justifyContent:'center',
+          alignItems:'center',
+          textAlign:'center'
+        }}
+        variant="contained"
+        sx={{ bgcolor: green[500], '&:hover': { bgcolor: green[700] } }}
+      >
+          <RemoveIcon />
+        </Button>
+    
+      </Box>
+      
+    
       </>
+    
       )
 
       }
+
+
      
       <div>
+      {isLoading ? (
+  <Button
+  style={{
+    marginTop:50,
+    width:'100%'
+  }}
+  variant="contained"
+  sx={{ bgcolor: green[500], '&:hover': { bgcolor: green[700] } }}
+>
+  Loading Cart
+</Button>
+      ) : (
+  <Button
+        style={{
+          marginTop:50,
+          width:'100%'
+        }}
+        variant="contained"
+        sx={{ bgcolor: green[500], '&:hover': { bgcolor: green[700] } }}
+        onClick={() => navigate("/cart")}
+      >
+        Add to Cart
+      </Button>
+      )
 
+      }
       </div>
       {/* {product.variation ? (
         <div className="pro-details-size-color">
