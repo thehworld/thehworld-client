@@ -126,26 +126,3 @@ export const getAllProductsFromCategory = (cateId) => {
             console.log("Error - ", err);
         });
 }
-
-
-
-
-
-
-
-
-
-// const [userFirstName, setuserFirstName] = useState("");
-// const [userLastName, setuserLastName] = useState("");
-// const [userEmailId, setuserEmailId] = useState("");
-// const [userPhone, setuserPhone] = useState("");
-// const [userWAPhone, setuserWAPhone] = useState("");
-// const [userLocation, setuserLocation] = useState("");
-// const [userState, setuserState] = useState("");
-// const [userAddress, setuserAddress] = useState("");
-// const [userPincode, setuserPincode] = useState("");
-// const [userOrderNote, setuserOrderNote] = useState("");
-// const [userCityTown, setuserCityTown] = useState("");
-// const [userAddressTwo, setuserAddressTwo] = useState("");
-// const [userPostalCode, setuserPostalCode] = useState("");
-// const [userOrderNotes, setuserOrderNotes] = useState("");

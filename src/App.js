@@ -423,7 +423,11 @@ const App = () => {
               />
               <Route
                 path={process.env.PUBLIC_URL + "/my-account"}
-                element={<MyAccount/>}
+                element={
+                <UserRoutes>
+                    <MyAccount/>
+                </UserRoutes>
+                }
               />
               <Route
                 path={process.env.PUBLIC_URL + "/login-register"}

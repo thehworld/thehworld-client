@@ -21,7 +21,7 @@ const MyAccount = () => {
   const [userEmailId, setuserEmailId] = useState("");
   const [userPhone, setuserPhone] = useState("");
   const [userLocation, setuserLocation] = useState("");
-  
+  const [userOrders, setuserOrders] = useState([]);
 
   const [isLoading, setisLoading] = useState(false);
 
@@ -32,12 +32,17 @@ const MyAccount = () => {
       getUserDetails(token).then((res) => {
           toast("Fetching...")
           console.log("User Res - ", res);
+          console.log("User Res - ", res.data.orders);
           setuser(res.data.user);
           setuserFirstName(res.data.user.userName);
           setuserLastName(res.data.user.userGoogleName);
           setuserEmailId(res.data.user.userEmail);
           setuserLocation("");
           setisLoading(false);
+          if(res.data.orders.length > 0){
+            setuserOrders(res.data.orders);
+          }
+
         }).catch((error) => {
           console.log("Error - ", error);
       })
@@ -45,6 +50,8 @@ const MyAccount = () => {
   }
 
 
+
+  
   useEffect(() => {
       getUserInformation()
   }, [])
@@ -164,37 +171,53 @@ const MyAccount = () => {
                       <Accordion.Header className="panel-heading">
                           <span>2 .</span> Your Order History and Status
                       </Accordion.Header>
-                      <Accordion.Body>
-                          <div className="myaccount-info-wrapper">
-                            <div className="account-info-wrapper">
-                              <h4>Address Book Entries</h4>
-                            </div>
-                            <div className="entries-wrapper">
-                              <div className="row">
-                                <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                                  <div className="entries-info text-center">
-                                    <p>John Doe</p>
-                                    <p>Paul Park </p>
-                                    <p>Lorem ipsum dolor set amet</p>
-                                    <p>NYC</p>
-                                    <p>New York</p>
-                                  </div>
-                                </div>
-                                <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                                  <div className="entries-edit-delete text-center">
-                                    <button className="edit">Edit</button>
-                                    <button>Delete</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="billing-back-btn">
-                              <div className="billing-btn">
-                                <button type="submit">Continue</button>
-                              </div>
-                            </div>
-                          </div>
-                      </Accordion.Body>
+                      {
+                        console.log("userOrder -> ", userOrders)
+                      }
+                      <div>
+                        {userOrders.length > 0 && userOrders.map((order, index) =>  (
+ <Accordion.Body key={index}>
+   {
+    console.log(order)
+  }
+ <div className="myaccount-info-wrapper">
+   <div className="account-info-wrapper">
+     <h4>Order Id: {order.orderId}</h4>
+   </div>
+   <div className="entries-wrapper">
+     <div className="row">
+      {order.orderProduct.map((product, index) => {
+          return(
+            <>
+ 
+             <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
+         <div className="entries-info text-center">
+           <p>{product.product.productName}</p>
+           <p>{product.product.productDescription}</p>
+           <p>Qty. {product.qty} Price.{product.product.productPrice}</p>
+           <p>Total Price.{order.paymentTotal}</p>
+         </div>
+       </div>
+       <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
+         <div className="entries-edit-delete text-center">
+           <button className="edit">Track Order</button>
+         </div>
+       </div>
+            </>
+          )  
+      })
+
+      }
+      
+     </div>
+   </div>
+   
+ </div>
+</Accordion.Body>
+                        ) 
+)}
+                      </div>
+                     
                     </Accordion.Item>
                   </Accordion>
                 </div>
