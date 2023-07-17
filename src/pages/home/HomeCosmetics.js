@@ -36,7 +36,6 @@ const HomeCosmetics = () => {
         {/* banner */}
         <BannerNine spaceBottomClass="pb-70" />
         {/* brand logo slider */}
-        <BrandLogoSliderOne spaceBottomClass="pb-95" />
         {/* blog featured */}
         <BlogFeatured spaceBottomClass="pb-55" />
     

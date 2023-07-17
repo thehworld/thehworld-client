@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const HeroSliderEightSingle = ({ data }) => {
   return (
     <div
-      className="single-slider-2 slider-height-1 d-flex align-items-center slider-height-res hm-13-slider"
+      className="single-slider-2 slider-height-1 d-flex align-items-center slider-height-res hm-13-slider" style={{marginTop: "100px"}}
       // style={{
       //   backgroundImage: `url(${process.env.PUBLIC_URL + data.image})`
       // }}
@@ -13,9 +13,9 @@ const HeroSliderEightSingle = ({ data }) => {
         <div className="row">
           <div className="col-xl-6 col-lg-6 col-md-6">
             <div className="slider-content-13 slider-animated-1">
-              <h5 className="animated">{data.title}</h5>
-              <h1
-                className="animated montserrat-header" style={{fontSize: "3.8rem", lineHeight:"70px", marginTop: "35px"}}
+              <h5 className="animated slider-title">{data.title}</h5>
+              <h3
+                className="animated montserrat-header" 
                 dangerouslySetInnerHTML={{ __html: data.subtitle }}
               />
               <div className="slider-btn btn-hover">
@@ -30,8 +30,8 @@ const HeroSliderEightSingle = ({ data }) => {
           </div>
           <div className="col-xl-6 col-lg-6 col-md-6">
             <div className="slider-content-13 slider-animated-1">
-              <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-              <img src={process.env.PUBLIC_URL + data.image} style={{width: "100%"}} />
+              <div className="img-div">
+              <img src={process.env.PUBLIC_URL + data.image} className="header-img" />
               </div>
             </div>
           </div>

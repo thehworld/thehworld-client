@@ -29,7 +29,53 @@
 .montserrat-header{
   font-family: montserratBold;
   color: #314032;
+  font-size: 3.5rem;
+  line-height: 70px;
+  margin-top: 25px;
+}
 
+.header-img{
+  width: 100%;
+}
+
+@media only screen and (max-width: 994px){
+  .montserrat-header{
+    font-size: 2.5rem;
+    line-height: 40px;
+  }
+}
+@media only screen and (max-width: 769px){
+  .montserrat-header{
+    font-size: 1.8rem;
+    line-height: 40px;
+    text-align: center;
+  }
+  .slider-btn{
+    text-align: center;
+  }
+  .slider-title{
+    text-align: center;
+  }
+  .img-div{
+    justify-content: center;
+  }
+  .header-img{
+    width: 45%;
+  }
+}
+
+
+
+.img-div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 250px;
+  margin-bottom: 100px;
+}
+
+.slide-header{
+  font-size: 1.1rem;
 }
 
 .sticky-bar.stick {
@@ -2082,6 +2128,7 @@
 
 .mobile-aside-button {
   padding: 0;
+  margin-top: 10px;
 }
 
 

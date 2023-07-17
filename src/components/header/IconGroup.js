@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { getUserDetails } from "../../apis/api";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { Avatar } from "@mui/material";
+import Stack from '@mui/material';
 
 const IconGroup = ({ iconWhiteClass }) => {
   const handleClick = e => {
@@ -69,6 +71,36 @@ const IconGroup = ({ iconWhiteClass }) => {
       getUserInformation()
   }, [])
 
+  function stringToColor(string) {
+    let hash = 0;
+    let i;
+  
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+  
+    let color = '#';
+  
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+  
+    return color;
+  }
+  
+  function stringAvatar(name) {
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+      },
+      children: `${name.split(' ')[0][0]}`,
+    };
+  }
+  
+
 
 
   return (
@@ -126,20 +158,17 @@ const IconGroup = ({ iconWhiteClass }) => {
           </ul>
         </div>
       </div>
-      <div className="same-style header-compare">
+      {/* <div className="same-style header-compare">
         <Link to={process.env.PUBLIC_URL + "/compare"}>
           <i className="pe-7s-shuffle" />
           <span className="count-style">
             {compareItems && compareItems.length ? compareItems.length : 0}
           </span>
         </Link>
-      </div>
+      </div> */}
       <div className="same-style header-wishlist">
         <Link to={process.env.PUBLIC_URL + "/wishlist"}>
-          <i className="pe-7s-like" />
-          <span className="count-style">
-            {wishlistItems && wishlistItems.length ? wishlistItems.length : 0}
-          </span>
+          <Avatar {...stringAvatar('Varun')} />
         </Link>
       </div>
       <div className="same-style cart-wrap d-none d-lg-block">
