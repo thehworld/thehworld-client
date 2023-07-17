@@ -63,7 +63,7 @@ const TabProductFive = ({
       })
   }
 
-  const [categoryIdForProductDetails, setcategoryIdForProductDetails] = useState([]);
+  const [categoryIdForProductDetails, setcategoryIdForProductDetails] = useState("");
   
   const [productDetails, setproductDetails] = useState([]);
   const getAProductDetails = (e, id) => {
@@ -93,16 +93,16 @@ const TabProductFive = ({
             className={clsx("product-tab-list-2 mb-60", productTabClass)}
           >
             {isLoading ? (
-              <p>
-                Loading ... 
-              </p>
+              <div class="spinner-border text-success" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
             ) : (
                 <>
                 {allCategories && allCategories.map((cate, index) => {
                     return(
                 <Nav.Item onClick={(e) => getAProductDetails(e, cate._id)}>
                   <Nav.Link eventKey="newArrival">
-                    <h4>{cate.categoryName}</h4>
+                    <h5>{cate.categoryName}</h5>
                   </Nav.Link>
                 </Nav.Item>
                     )
