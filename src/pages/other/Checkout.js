@@ -173,12 +173,12 @@ const Checkout = () => {
       />
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
-        <Breadcrumb 
+        {/* <Breadcrumb 
           pages={[
             {label: "Home", path: process.env.PUBLIC_URL + "/" },
             {label: "Checkout", path: process.env.PUBLIC_URL + "/chekout" }
           ]} 
-        />
+        /> */}
         <div className="checkout-area pt-95 pb-100">
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (

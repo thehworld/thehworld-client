@@ -12,7 +12,7 @@ import { addToCompare } from "../../store/slices/compare-slice";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from 'uuid';
 import { getUserDetails, userCartAddRemove } from "../../apis/api";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography, colors } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
@@ -147,56 +147,26 @@ const ProductDescriptionInfo = ({
         <p>{product.productDescription}</p>
       </div>
 
-      {isLoading ? (<p style={{
-        textAlign:"center"
-      }}>....</p>) : (
+      {isLoading ? (
+        <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+      <CircularProgress color="success" />  
+      </div>
+      ): (
         <>
-        
+        <div style={{display: "flex", justifyContent: "center", alignItems: "center", gap: "20px"}}>
       <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        borderRadius: '8px',
+        borderRadius: '20px',
       }}
     >
- <Button
-      onClick={(e) => addProductToCart(e, product)}
-        style={{
-          marginTop:5,
-          width:'80%',
-          borderRadius:1000,
-          justifyContent:'center',
-          alignItems:'center',
-          textAlign:'center'
-        }}
-        variant="contained"
-        sx={{ bgcolor: green[500], '&:hover': { bgcolor: green[700] } }}
-      >
-            <AddIcon />
-        </Button>
-
-
-    </Box>
-     
-      <p style={{
-        textAlign:'center'
-      }}>
-      {cartspecific}
-      </p>
-      <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        borderRadius: '8px',
-      }}
-    >
-<Button
+      
+      <Button
       onClick={(e) => removeProductToCart(e, product)}
         style={{
-          marginTop:2,
-          width:'80%',
+          marginTop:0,
           borderRadius:1000,
           justifyContent:'center',
           alignItems:'center',
@@ -207,9 +177,42 @@ const ProductDescriptionInfo = ({
       >
           <RemoveIcon />
         </Button>
-    
+
+    </Box>
+     
+      <h2 style={{
+        textAlign:'center',
+        fontWeight: "bolder",
+        color: "#4FB23A"
+      }}>
+      {cartspecific}
+      </h2>
+      <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        borderRadius: '20px',
+      }}
+    >
+
+        <Button
+      onClick={(e) => addProductToCart(e, product)}
+        style={{
+          marginTop:0,
+          
+          borderRadius:1000,
+          justifyContent:'center',
+          alignItems:'center',
+          textAlign:'center'
+        }}
+        variant="contained"
+        sx={{ bgcolor: green[500], '&:hover': { bgcolor: green[700] } }}
+      >
+            <AddIcon />
+        </Button>
       </Box>
-      
+      </div>
     
       </>
     
@@ -446,7 +449,7 @@ const ProductDescriptionInfo = ({
       )}
 */}
 
-      <div className="pro-details-social">
+      {/* <div className="pro-details-social">
         <ul>
           <li>
             <a href="//facebook.com">
@@ -474,7 +477,7 @@ const ProductDescriptionInfo = ({
             </a>
           </li>
         </ul>
-      </div> 
+      </div>  */}
     </div>
   );
 };

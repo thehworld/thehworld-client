@@ -47,12 +47,12 @@ const Product = () => {
 
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}    
-        <Breadcrumb 
+        {/* <Breadcrumb 
           pages={[
             {label: "Home", path: process.env.PUBLIC_URL + "/" },
             {label: "Shop Product", path: process.env.PUBLIC_URL + productData.productName }
           ]} 
-        />
+        /> */}
 
 
         {/* product description with image */}
@@ -63,9 +63,9 @@ const Product = () => {
           galleryType="left"
         />
 
-        <p>
+        {/* <p>
           {productData.productName}
-        </p>
+        </p> */}
 
         {/* product description tab */}
         <ProductDescriptionTab

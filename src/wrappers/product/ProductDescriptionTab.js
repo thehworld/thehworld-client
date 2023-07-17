@@ -33,12 +33,12 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
                       <span>Dimensions</span>10 x 10 x 15 cm{" "}
                     </li>
                     <li>
-                      <span>Materials</span> 60% cotton, 40% polyester
+                      <span>Key ingredients</span> Argon Oil, Hemp Oil
                     </li>
-                    <li>
+                    {/* <li>
                       <span>Other Info</span> American heirloom jean shorts pug
                       seitan letterpress
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
               </Tab.Pane>
