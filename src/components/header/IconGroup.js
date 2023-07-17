@@ -100,12 +100,13 @@ const IconGroup = ({ iconWhiteClass }) => {
     };
   }
   
+  
 
 
 
   return (
     <div className={clsx("header-right-wrap", iconWhiteClass)} >
-      <div className="same-style header-search d-none d-lg-block">
+      {/* <div className="same-style header-search d-none d-lg-block">
         <button className="search-active" onClick={e => handleClick(e)}>
           <i className="pe-7s-search" />
         </button>
@@ -117,47 +118,47 @@ const IconGroup = ({ iconWhiteClass }) => {
             </button>
           </form>
         </div>
-      </div>
-      <div className="same-style account-setting d-none d-lg-block">
-        <button
-          className="account-setting-active"
-          onClick={e => handleClick(e)}
-        >
-          <i className="pe-7s-user-female" />
-        </button>
-        <div className="account-dropdown">
-          <ul>
-            {userFirstName ? (
-              <>
-              <li onClick={userLogout}>
-              <Link>Logout</Link>
+      </div> */}
+      {/* <div className="same-style account-setting d-none d-lg-block">
+          <button
+            className="account-setting-active"
+            onClick={e => handleClick(e)}
+          >
+            <i className="pe-7s-user-female" />
+          </button>
+          <div className="account-dropdown">
+            <ul>
+              {userFirstName ? (
+                <>
+                <li onClick={userLogout}>
+                <Link>Logout</Link>
+              </li>
+              <li>
+              <Link to={process.env.PUBLIC_URL + "/my-account"}>
+                my account
+              </Link>
             </li>
+            </>
+              ) : (
+                <>
+              <li>
+              <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
+            </li>  
             <li>
-            <Link to={process.env.PUBLIC_URL + "/my-account"}>
-              my account
+            <Link to={process.env.PUBLIC_URL + "/login-register"}>
+              Register
             </Link>
           </li>
           </>
-            ) : (
-              <>
-            <li>
-            <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
-          </li>  
-          <li>
-          <Link to={process.env.PUBLIC_URL + "/login-register"}>
-            Register
-          </Link>
-        </li>
-        </>
-            )
+              )
 
-            }
-            
-            
+              }
+              
+              
             
           </ul>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
       {/* <div className="same-style header-compare">
         <Link to={process.env.PUBLIC_URL + "/compare"}>
           <i className="pe-7s-shuffle" />
@@ -167,9 +168,19 @@ const IconGroup = ({ iconWhiteClass }) => {
         </Link>
       </div> */}
       <div className="same-style header-wishlist">
-        <Link to={process.env.PUBLIC_URL + "/wishlist"}>
-          <Avatar {...stringAvatar('Varun')} />
-        </Link>
+        
+          {userFirstName ? (
+            <Link to={process.env.PUBLIC_URL + "/my-account"}>
+            <Avatar {...stringAvatar(`${userFirstName}`)} className="avatar-i"/>
+            </Link>
+
+          ):(
+            <Link to={process.env.PUBLIC_URL + "/login-register"} className="avatar-i">
+            <Avatar>?</Avatar>
+             </Link>
+
+          )}
+          
       </div>
       <div className="same-style cart-wrap d-none d-lg-block">
       <Link className="icon-cart" to={process.env.PUBLIC_URL + "/cart"}>

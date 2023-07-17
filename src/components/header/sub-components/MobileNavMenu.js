@@ -74,7 +74,7 @@ const userLogout = (e) => {
         </li>
         <li onClick={userLogout}>
               <Link>Logout</Link>
-            </li>
+        </li>
         </>  
         ) : (
 <li>

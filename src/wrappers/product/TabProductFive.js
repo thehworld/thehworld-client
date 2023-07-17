@@ -7,6 +7,7 @@ import ProductGridTwo from "./ProductGridTwo";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { getAllCategories, getAllProductsFromCategory } from "../../apis/api";
+import { CircularProgress } from "@mui/material";
 
 const product = [
   {
@@ -93,8 +94,8 @@ const TabProductFive = ({
             className={clsx("product-tab-list-2 mb-60", productTabClass)}
           >
             {isLoading ? (
-              <div class="spinner-border text-success" role="status">
-              <span class="visually-hidden">Loading...</span>
+              <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+              <CircularProgress color="success" />
             </div>
             ) : (
                 <>
@@ -102,7 +103,7 @@ const TabProductFive = ({
                     return(
                 <Nav.Item onClick={(e) => getAProductDetails(e, cate._id)}>
                   <Nav.Link eventKey="newArrival">
-                    <h5>{cate.categoryName}</h5>
+                    <h3>{cate.categoryName}</h3>
                   </Nav.Link>
                 </Nav.Item>
                     )

@@ -58,6 +58,19 @@
   }
 }
 
+.avatar-i{
+  margin-top: -6px;
+}
+
+@media only screen and (max-width: 990px) {
+  .avatar-i{
+    margin-top: 4px;
+  }
+  .icon-cart{
+    margin-top: 10px;
+  }
+}
+
 .single-my-account {
   .myaccount-info-wrapper {
     padding: 30px 20px;

@@ -62,12 +62,12 @@ const Cart = () => {
 
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
-        <Breadcrumb 
+        {/* <Breadcrumb 
           pages={[
             {label: "Home", path: process.env.PUBLIC_URL + "/" },
             {label: "Cart", path: process.env.PUBLIC_URL + pathname }
           ]} 
-        />
+        /> */}
         {console.log("Here Cart - ", cartItems)}
         <div className="cart-main-area pt-90 pb-100">
           <div className="container">
@@ -199,7 +199,7 @@ const Cart = () => {
                     </div>
                   </div>
                 </div>
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-lg-12">
                     <div className="cart-shiping-update-wrapper">
                       <div className="cart-shiping-update">
@@ -216,10 +216,10 @@ const Cart = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                <div className="row">
-                  <div className="col-lg-4 col-md-6">
+                <div className="row mt-5">
+                  {/* <div className="col-lg-4 col-md-6">
                     <div className="cart-tax">
                       <div className="title-wrap">
                         <h4 className="cart-bottom-title section-bg-gray">
@@ -261,7 +261,7 @@ const Cart = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="col-lg-4 col-md-6">
                     <div className="discount-code-wrapper">

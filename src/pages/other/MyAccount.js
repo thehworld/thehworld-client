@@ -74,7 +74,8 @@ const MyAccount = () => {
         <div  style={{
           alignContent:'center'
         }}>
-        <img alt={user.userGoogleName} src={user.userProfilePic}/>
+        <h3 style={{textAlign: "center", marginTop: "20px"}}>hi {userFirstName}</h3>
+        {/* <img alt={user.userGoogleName} src={user.userProfilePic}/> */}
         </div>
         <div className="myaccount-area pb-80 pt-100">
           <div className="container">

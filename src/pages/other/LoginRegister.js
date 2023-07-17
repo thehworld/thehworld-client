@@ -92,19 +92,20 @@ const LoginRegister = () => {
             {label: "Login Register", path: process.env.PUBLIC_URL + pathname }
           ]} 
         />
-       
+       <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px"}}>
         <GoogleLogin
-  onSuccess={credentialResponse => {
-    console.log("credentialResponse", credentialResponse);
-    var token = credentialResponse.credential;
-    var decoded = jwt_decode(token);
-    console.log("User Data - ", decoded);
-    userAuthHere(decoded)
-  }}
-  onError={() => {
-    console.log('Login Failed');
-  }}
-/>;
+        onSuccess={credentialResponse => {
+          console.log("credentialResponse", credentialResponse);
+          var token = credentialResponse.credential;
+          var decoded = jwt_decode(token);
+          console.log("User Data - ", decoded);
+          userAuthHere(decoded)
+        }}
+        onError={() => {
+          console.log('Login Failed');
+        }}
+      />
+      </div>
         <div className="login-register-area pt-100 pb-100">
           <div className="container">
             <div className="row">
