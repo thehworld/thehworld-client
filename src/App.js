@@ -465,11 +465,19 @@ const App = () => {
               />
               <Route
                 path={process.env.PUBLIC_URL + "/checkout"}
-                element={<Checkout/>}
+                element={
+                  <UserRoutes>
+                <Checkout/>
+                </UserRoutes>
+              }
               /> 
               <Route
                 path={process.env.PUBLIC_URL + "/orderstatus"}
-                element={<Orders />}
+                element={
+                <UserRoutes>
+                <Orders />
+                </UserRoutes>
+                }
               /> 
 
               <Route path="*" element={<NotFound/>} />

@@ -32,9 +32,11 @@ const Checkout = () => {
   const [userOrderNote, setuserOrderNote] = useState("");
   const [userCityTown, setuserCityTown] = useState("");
   const [userAddressTwo, setuserAddressTwo] = useState("");
+  const [userHome, setuserHome] = useState("");
   const [userPostalCode, setuserPostalCode] = useState("");
   const [userOrderNotes, setuserOrderNotes] = useState("");
   const [userOrderProduct, setuserOrderProduct] = useState([]);
+
 
 
   const [userOrderSubTotal, setuserOrderSubTotal] = useState("");
@@ -61,9 +63,18 @@ const Checkout = () => {
             let address_list = res.data.user.userAddresses;
             setuserAddress(address_list);
           }
-          if(res.data.user.contactNumber || res.data.user.contactWAForAuto || res.data.user.contactWAForAuto){
+          if(res.data.user.contactNumber ||
+            res.data.user.contactWAForAuto ||
+            res.data.user.userAddressPincode || 
+            res.data.user.userState ||
+            res.data.user.userHome ||
+            res.data.user.userTown){
             setuserPhone(res.data.user.contactNumber);
             setuserWAPhone(res.data.user.contactWAForAuto);
+            setuserPincode(res.data.user.userAddressPincode);
+            setuserState(res.data.user.userState);
+            setuserHome(res.data.user.userHome);
+            setuserCityTown(res.data.user.userTown);
           }
           
           setuserLocation("");
@@ -146,10 +157,11 @@ const Checkout = () => {
             userLocation,
             userState,
             userAddress,
-            userPincode,
+            userAddressPincode: userPincode,
             userOrderNote,
-            userCityTown,
+            userTown:userCityTown,
             userAddressTwo,
+            userHome,
             userOrderSubTotal :cartSubTotalPrice,
             userOrderGrandTotal: cartTotalPrice,
             userOrderisOffer,
@@ -225,9 +237,10 @@ const Checkout = () => {
                             type="text"
                           />
                           <input
-                            value={userAddressTwo} onChange={(e) => setuserAddressTwo(e.target.value)}
                             placeholder="Apartment, suite, unit etc."
                             type="text"
+                            value={userHome}
+                            onChange={(e) => setuserHome(e.target.value)}
                           />
                         </div>
                       </div>
