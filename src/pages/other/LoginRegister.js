@@ -129,8 +129,8 @@ const LoginRegister = () => {
                           }}
                         />
                         </div>
-                        <hr class="hr-text" data-content="OR" />
-                          <div className="login-register-form">
+                        {/* <hr class="hr-text" data-content="OR" /> */}
+                          {/* <div className="login-register-form">
                             <form>
                               <input
                                 type="text"
@@ -155,7 +155,7 @@ const LoginRegister = () => {
                                 </button>
                               </div>
                             </form>
-                          </div>
+                          </div> */}
                         </div>
                       </Tab.Pane>
                       <Tab.Pane eventKey="register">
@@ -175,7 +175,7 @@ const LoginRegister = () => {
                           }}
                         />
                         </div>
-                        <hr class="hr-text" data-content="OR" />
+                        {/* <hr class="hr-text" data-content="OR" />
                           <div className="login-register-form">
                             <form>
                               <input
@@ -199,7 +199,7 @@ const LoginRegister = () => {
                                 </button>
                               </div>
                             </form>
-                          </div>
+                          </div> */}
                         </div>
                       </Tab.Pane>
                     </Tab.Content>
