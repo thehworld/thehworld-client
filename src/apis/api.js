@@ -7,7 +7,7 @@ const API_SAUTH = "http://localhost:8080";
 const API_STAGING = "http://localhost:8080/api/web";
 
 
-const API_USE = API_TESTING;
+const API_USE = API_STAGING;
 const API_AUTH_USE = API_SAUTH;
 
 
@@ -34,6 +34,18 @@ export const userCartAddRemove = (product, opt, token) => {
         }
     }).then((res) => {
         return res
+    }).catch((err) => {
+        console.log("Error - ", err);
+    });
+}
+
+export const removeCartHere = (id, token) => {
+    return axios.post(`${API_USE}/remove/cart`, { id: id }, {
+        headers: {
+            token: token
+        }
+    }).then((res) => {
+        return res;
     }).catch((err) => {
         console.log("Error - ", err);
     });
