@@ -1,4 +1,6 @@
 import { Fragment, useEffect } from "react"; 
+import { Link, useNavigate } from "react-router-dom";
+
 import { useLocation } from "react-router-dom"; 
 import Accordion from "react-bootstrap/Accordion";
 import SEO from "../../components/seo";
@@ -7,9 +9,12 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { getUserDetails } from "../../apis/api";
 import Cookies from "js-cookie";
 import { useState } from "react";
+
 import Avatar from 'react-avatar';
 import { AvatarGroup } from "@mui/material";
 import { ToastContainer, toast } from 'react-toastify';
+
+
 
 const MyAccount = () => {
   let { pathname } = useLocation();
@@ -55,13 +60,22 @@ const MyAccount = () => {
   useEffect(() => {
       getUserInformation()
   }, [])
-  
+
+const navigate = useNavigate();
+
+
+  const userLogout = (e) => {
+    e.preventDefault();
+    Cookies.remove('TID');
+    Cookies.remove('name');
+    navigate("/")
+  }
 
   return (
     <Fragment>
       <SEO
         titleTemplate={"My Account " + user.userName}
-        description="My Account page of flone react minimalist eCommerce template."
+        description=""
       />
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
@@ -201,7 +215,9 @@ const MyAccount = () => {
        </div>
        <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
          <div className="entries-edit-delete text-center">
-           <button className="edit">Track Order</button>
+          <Link to='/orderstatus'>
+           <button style={{padding: "5px"}}>Track Order</button>
+           </Link>
          </div>
        </div>
             </>
@@ -225,6 +241,9 @@ const MyAccount = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div style={{display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0"}}>
+        <button onClick={userLogout} className="logout-btn">Logout</button>
         </div>
       </LayoutOne>
     </Fragment>
