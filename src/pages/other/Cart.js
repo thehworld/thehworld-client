@@ -7,7 +7,7 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { addToCart, decreaseQuantity, deleteFromCart, deleteAllFromCart } from "../../store/slices/cart-slice";
 import { cartItemStock } from "../../helpers/product";
-import { getUserDetails } from "../../apis/api";
+import { getUserDetails, removeCartHere } from "../../apis/api";
 import Cookies from "js-cookie";
 
 const Cart = () => {
@@ -48,11 +48,29 @@ const Cart = () => {
   }
 
 
-  useEffect(() => {
-      fetchCartData()
-  }, [])
-  
 
+  const [cartRenderStatus, setcartRenderStatus] = useState(false);
+
+  useEffect(() => {
+    fetchCartData()
+}, [cartRenderStatus])
+
+
+  const removeCartItems = (e, id) => {
+      e.preventDefault();
+      const token = Cookies.get("TID");
+      console.log("Remove Cart Here - ", id)
+      removeCartHere(id, token).then((res) => {
+            console.log("Remove Cart - ", res);
+            if(res.data.cartuser){
+              setcartRenderStatus(!cartRenderStatus);
+            }
+      }).catch((err) => {
+          console.log("Error - ", err)
+      })
+  }
+
+  
   return (
     <Fragment>
       <SEO
@@ -186,7 +204,7 @@ const Cart = () => {
 
                                 <td className="product-remove">
                                   <button
-                                    
+                                      onClick={(e) => removeCartItems(e, cartItem.id)}
                                   >
                                     <i className="fa fa-times"></i>
                                   </button>
