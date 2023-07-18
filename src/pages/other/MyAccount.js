@@ -23,6 +23,11 @@ const MyAccount = () => {
   const [userLocation, setuserLocation] = useState("");
   const [userOrders, setuserOrders] = useState([]);
 
+
+  const [userAddress, setUserAddress] = useState("");
+  const [userWAPhone, setUSerWAPhone] = useState("");
+
+
   const [isLoading, setisLoading] = useState(false);
 
   const getUserInformation = () => {
@@ -38,6 +43,8 @@ const MyAccount = () => {
           setuserLastName(res.data.user.userGoogleName);
           setuserEmailId(res.data.user.userEmail);
           setuserLocation("");
+          
+          
           setisLoading(false);
           if(res.data.orders.length > 0){
             setuserOrders(res.data.orders);

@@ -57,6 +57,15 @@ const Checkout = () => {
           setuserFirstName(res.data.user.userName);
           setuserLastName(res.data.user.userGoogleName);
           setuserEmailId(res.data.user.userEmail);
+          if(res.data.user.userAddresses.length > 0){
+            let address_list = res.data.user.userAddresses;
+            setuserAddress(address_list);
+          }
+          if(res.data.user.contactNumber || res.data.user.contactWAForAuto || res.data.user.contactWAForAuto){
+            setuserPhone(res.data.user.contactNumber);
+            setuserWAPhone(res.data.user.contactWAForAuto);
+          }
+          
           setuserLocation("");
           setisLoading(false);
         }).catch((error) => {
