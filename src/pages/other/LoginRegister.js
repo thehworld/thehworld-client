@@ -86,26 +86,13 @@ const LoginRegister = () => {
       />
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
-        <Breadcrumb 
+        {/* <Breadcrumb 
           pages={[
             {label: "Home", path: process.env.PUBLIC_URL + "/" },
             {label: "Login Register", path: process.env.PUBLIC_URL + pathname }
           ]} 
-        />
-       <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px"}}>
-        <GoogleLogin
-        onSuccess={credentialResponse => {
-          console.log("credentialResponse", credentialResponse);
-          var token = credentialResponse.credential;
-          var decoded = jwt_decode(token);
-          console.log("User Data - ", decoded);
-          userAuthHere(decoded)
-        }}
-        onError={() => {
-          console.log('Login Failed');
-        }}
-      />
-      </div>
+        /> */}
+       
         <div className="login-register-area pt-100 pb-100">
           <div className="container">
             <div className="row">
@@ -127,6 +114,22 @@ const LoginRegister = () => {
                     <Tab.Content>
                       <Tab.Pane eventKey="login">
                         <div className="login-form-container">
+                        <h5 style={{textAlign: "center"}}>Login with Google</h5>
+                        <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px"}}>
+                          <GoogleLogin
+                          onSuccess={credentialResponse => {
+                            console.log("credentialResponse", credentialResponse);
+                            var token = credentialResponse.credential;
+                            var decoded = jwt_decode(token);
+                            console.log("User Data - ", decoded);
+                            userAuthHere(decoded)
+                          }}
+                          onError={() => {
+                            console.log('Login Failed');
+                          }}
+                        />
+                        </div>
+                        <hr class="hr-text" data-content="OR" />
                           <div className="login-register-form">
                             <form>
                               <input
@@ -157,6 +160,22 @@ const LoginRegister = () => {
                       </Tab.Pane>
                       <Tab.Pane eventKey="register">
                         <div className="login-form-container">
+                        <h5 style={{textAlign: "center"}}>Sign-up with Google</h5>
+                        <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px"}}>
+                          <GoogleLogin
+                          onSuccess={credentialResponse => {
+                            console.log("credentialResponse", credentialResponse);
+                            var token = credentialResponse.credential;
+                            var decoded = jwt_decode(token);
+                            console.log("User Data - ", decoded);
+                            userAuthHere(decoded)
+                          }}
+                          onError={() => {
+                            console.log('Login Failed');
+                          }}
+                        />
+                        </div>
+                        <hr class="hr-text" data-content="OR" />
                           <div className="login-register-form">
                             <form>
                               <input

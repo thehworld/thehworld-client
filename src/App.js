@@ -10,6 +10,7 @@ import TestAuthLogout from "./pages/other/TestAuthLogout";
 import TestRouter from "./pages/other/TestRouter";
 import UserRoutes from "./routes/UsersRoutes";
 import PaymentSuccessPage from "./pages/other/PaymentLoadingPage";
+import Orders from "./pages/other/Orders";
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -465,6 +466,10 @@ const App = () => {
               <Route
                 path={process.env.PUBLIC_URL + "/checkout"}
                 element={<Checkout/>}
+              /> 
+              <Route
+                path={process.env.PUBLIC_URL + "/orderstatus"}
+                element={<Orders />}
               /> 
 
               <Route path="*" element={<NotFound/>} />
