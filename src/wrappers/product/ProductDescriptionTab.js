@@ -9,7 +9,7 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
     <div className={clsx("description-review-area", spaceBottomClass)}>
       <div className="container">
         <div className="description-review-wrapper">
-          <Tab.Container defaultActiveKey="productDescription">
+          <Tab.Container defaultActiveKey="additionalInfo">
             <Nav variant="pills" className="description-review-topbar">
               <Nav.Item>
                 <Nav.Link eventKey="additionalInfo">
@@ -29,12 +29,16 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
                   <ul>
                     <li>
                       <span>Key Ingredient</span> {
-                        productFullDesc.productIngredient[0]
+                        productFullDesc.productIngredient.length > 0 ? productFullDesc.productIngredient.map((des, index) => {
+                          return <p>{des}</p>
+                        }) : null
                       }
                     </li>
                     <li>
                       <span>Product Details</span>{
-                        productFullDesc.productDetails[0]
+                        productFullDesc.productDetails.length > 0 ? productFullDesc.productDetails.map((des, index) => {
+                          return <p>{des}</p> 
+                        }) : null
                       }{" "}
                     </li>
                    
@@ -46,10 +50,16 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
                 </div>
               </Tab.Pane>
               <Tab.Pane eventKey="productDescription">
-                {productFullDesc.howTo[0]}
+                {productFullDesc.howTo.length > 0 ? productFullDesc.howTo.map((prod, index) => {
+                  return(
+                    <p>
+                      {prod}
+                     </p> 
+                  )
+                }) : null }
               </Tab.Pane>
               <Tab.Pane eventKey="productReviews">
-                {productFullDesc.productDescription}
+                {productFullDesc.productDescription ? productFullDesc.productDescription: null}
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>
