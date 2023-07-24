@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Fragment, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -7,10 +8,19 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { getUserDetails, userOrderProductFromCart } from "../../apis/api";
 import Cookies from "js-cookie";
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const Checkout = () => {
 
+  const [age, setAge] = React.useState('');
 
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
 
 
   const navigate = useNavigate();
@@ -36,7 +46,7 @@ const Checkout = () => {
   const [userPostalCode, setuserPostalCode] = useState("");
   const [userOrderNotes, setuserOrderNotes] = useState("");
   const [userOrderProduct, setuserOrderProduct] = useState([]);
-
+  const [userPaymentOpions, setuserPaymentOpions] = useState("");
 
 
   const [userOrderSubTotal, setuserOrderSubTotal] = useState("");
@@ -140,6 +150,7 @@ const Checkout = () => {
       const token = Cookies.get("TID");
       // if(token)
       // userOrderProductFromCart(,);
+      // setcheckout(false);
       let cartTotalPrice = 0;
       let cartSubTotalPrice = 0;
       cartItems.map((cartItem, index) => {
@@ -161,6 +172,7 @@ const Checkout = () => {
             userOrderNote,
             userTown:userCityTown,
             userAddressTwo,
+            paymentOptions: userPaymentOpions,
             userHome,
             userOrderSubTotal :cartSubTotalPrice,
             userOrderGrandTotal: cartTotalPrice,
@@ -172,9 +184,15 @@ const Checkout = () => {
         userOrderProductFromCart(data, token).then((res) => {
           console.log("Res - ", res);
           if(res.data){
-            console.log(res.data);
+            console.log("Res.data - ",res.data);
+            console.log("Res.data - ",res.data.userRedirect);
             // navigate(res.data);
-            window.location.replace(res.data.paymentObject.data.instrumentResponse.redirectInfo.url);
+            if(res.data.userRedirect){
+              navigate("/my-account");
+            }
+            else if(res.data.paymentObject){
+              window.location.replace(res.data.paymentObject.data.instrumentResponse.redirectInfo.url);
+            }
           }
         }).catch((error) => {
             console.log("Error - ", error);
@@ -184,7 +202,55 @@ const Checkout = () => {
   }
 
 
+  const [checkout, setcheckout] = useState(false);
 
+
+  const changePaymentOptions = (event) => {
+    setuserPaymentOpions(event.target.value);   
+  }
+  
+  if(checkout){
+    return(
+      <div style={{
+        height:"100%",
+        width:"100%"
+      }}>
+        
+      <Box sx={{ minWidth: 120 }} style={{
+          marginTop:220
+      }}>
+        <p style={{
+          marginRight:15,
+          marginLeft:15,
+          fontWeight: 700
+        }}>
+            Pick Payment Options
+        </p>
+      <FormControl  style={{
+            marginRight:15,
+            marginLeft:15,
+            width:"90%"
+      }}>
+        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={age}
+          label="Payment Options"
+          onChange={changePaymentOptions}
+        >
+          <MenuItem value={'CARD'}>Card Payment</MenuItem>
+          <MenuItem value={'COD'}>Cash on Delivery</MenuItem>
+        </Select>
+        <div className="place-order mt-25">
+            <button className="btn-hover" onClick={(e) => placeOrder(e)}>Place Order</button>
+        </div>
+      </FormControl>
+    </Box>
+      </div>
+    )
+  }
+else
   return (
     
     <Fragment>
@@ -369,7 +435,7 @@ const Checkout = () => {
                       <div className="payment-method"></div>
                     </div>
                     <div className="place-order mt-25">
-                      <button className="btn-hover" onClick={(e) => placeOrder(e)}>Place Order</button>
+                      <button className="btn-hover" onClick={() => setcheckout(true)}>Place Order</button>
                     </div>
                   </div>
                 </div>

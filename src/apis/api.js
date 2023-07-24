@@ -7,7 +7,7 @@ const API_SAUTH = "http://localhost:8080";
 const API_STAGING = "http://localhost:8080/api/web";
 
 
-const API_USE = API_TESTING;
+const API_USE = API_STAGING;
 const API_AUTH_USE = API_SAUTH;
 
 
@@ -103,6 +103,19 @@ export const userOrderProductFromCart = (data, token) => {
     });
 }
 
+
+export const getAOrderDetails = (token, orderID) => {
+    console.log("Token, OrderID: ", token, orderID);
+    return axios.get(`${API_USE}/get/a/order/${orderID}`, {
+        headers: {
+            token: token
+        }
+    }).then((res) => {
+        return res
+    }).catch((err) => {
+        console.log("Error - ", err);
+    });
+}
 
 // **********************************************************************************
 

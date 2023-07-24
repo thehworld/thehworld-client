@@ -11,21 +11,29 @@ import { Fragment } from 'react';
 import SEO from '../../components/seo';
 import LayoutOne from '../../layouts/LayoutOne';
 import { Container } from 'react-bootstrap';
+import { getAOrderDetails } from '../../apis/api';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
+import { useState } from 'react';
 
 const steps = [
   {
     label: 'Order Placed',
+    stage: "NEW",
     description: `For each ad campaign that you create, you can control how much
               you're willing to spend on clicks and conversions, which networks
               and geographical locations you want your ads to show on, and more.`,
   },
   {
     label: 'Packed',
+    stage: "ACCEPTED",
     description:
       'An ad group contains one or more ads which target a shared set of keywords.',
   },
   {
     label: 'Dispatched',
+    stage: "DISPATCHED",
     description: `Try out different ad text to see what brings in the most customers,
               and learn how to enhance your ads using features like ad extensions.
               If you run into any problems with your ads, find out how to tell if
@@ -33,6 +41,7 @@ const steps = [
   },
   {
     label: 'Shipped',
+    stage: "SHIPPED",
     description: `Try out different ad text to see what brings in the most customers,
               and learn how to enhance your ads using features like ad extensions.
               If you run into any problems with your ads, find out how to tell if
@@ -40,6 +49,7 @@ const steps = [
   },
   {
     label: 'Out for Delivery',
+    stage: "OUTFORDELIVERY",
     description: `Try out different ad text to see what brings in the most customers,
               and learn how to enhance your ads using features like ad extensions.
               If you run into any problems with your ads, find out how to tell if
@@ -47,6 +57,7 @@ const steps = [
   },
   {
     label: 'Delivered',
+    stage: "DELIVERED",
     description: `Try out different ad text to see what brings in the most customers,
               and learn how to enhance your ads using features like ad extensions.
               If you run into any problems with your ads, find out how to tell if
@@ -55,7 +66,7 @@ const steps = [
 ];
 
 export default function Orders() {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(1);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -69,6 +80,58 @@ export default function Orders() {
     setActiveStep(0);
   };
 
+
+
+  const { orderId } = useParams();
+
+  console.log("orderId - ", orderId);
+
+  const [userOrders, setuserOrders] = useState("");
+  const [userDetails, setuserDetails] = useState("");
+  const getOrderDetailsFromId = (id) => {
+        console.log("id - ", id);
+        const token = Cookies.get("TID");
+        getAOrderDetails(token, id).then((res) => {
+            console.log("A Order Details  NUNUN- ",res);
+            setuserOrders(res.data.order);
+            setuserDetails(res.data.user);
+            switch(res.data.order.orderStatus){
+                case "NEW":
+                  setActiveStep(0)
+                  break;
+                case "ACCEPTED":
+                  setActiveStep(1)
+                  break;
+                case "DISPATCHED":
+                  setActiveStep(2)
+                  break;
+                case "SHIPPED":
+                  setActiveStep(3)
+                  break;
+                case "OUTFORDELIVERY":
+                  setActiveStep(4)
+                  break;
+                case "DELIVERED":
+                  setActiveStep(5)
+                  break;
+                default:
+                  setActiveStep(0);
+                  break;
+                }
+        }).catch((error) => {
+            console.log("Error - ", error);
+        });
+
+  }
+
+
+  useEffect(() => {
+        getOrderDetailsFromId(orderId);
+  }, [orderId])
+  
+
+
+  if(userOrders)
   return (
     <Fragment>
       <SEO
@@ -78,21 +141,14 @@ export default function Orders() {
       <LayoutOne headerTop="visible">
         <Container style={{minHeight: "100vh"}}>
     <Box sx={{ maxWidth: 400 }}>
-    <div>
-        <h5>Order ID: 5858214</h5>
-        <h5>Products: Hair Serum (2nos)</h5>
-        <h5>Total: ₹599</h5>
-        <h5>Payment Status: Cash on delivery</h5>
-
-        
-    </div>
+    
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((step, index) => (
           <Step key={step.label}>
             <StepLabel
               optional={
                 
-                  <Typography variant="caption">15:23, 08 Mon 2023</Typography>
+                  <Typography variant="caption">{userOrders.createdAt}</Typography>
                 
               }
             >
@@ -100,9 +156,42 @@ export default function Orders() {
             </StepLabel>
             <StepContent>
               <Typography>{step.description}</Typography>
+              <div>
+              <div>
+        <h5>Order ID: {userOrders._id}</h5>
+        {userOrders.orderProduct.length > 0 && userOrders.orderProduct.map((pro) => {
+            return(
+              <>
+                <h5>{pro.id}</h5>
+                {pro.product.productImages.map((img, index) => {
+                    return(
+                      <img src={img} height={50} width={50}/>
+                    )
+                })
+                }
+                <div>
+                  {pro.product.productName}
+                  {pro.product.productPrice}
+                  <hr></hr>
+                  {pro.product.productDiscountPrice} * {pro.qty}
+                </div>
+                <h5>Total: ₹{pro.orderTotal}</h5>
+
+            </>
+            )}
+        )}
+      <div>
+        <h5>Payment Status: {userOrders.paymentMethod}</h5>
+
+        Total Order Amount ₹{userOrders.orderTotal}
+      </div>
+
+        
+    </div>
+              </div>
               <Box sx={{ mb: 2 }}>
                 <div>
-                  <Button
+                  {/* <Button
                     variant="contained"
                     onClick={handleNext}
                     sx={{ mt: 1, mr: 1 }}
@@ -115,7 +204,7 @@ export default function Orders() {
                     sx={{ mt: 1, mr: 1 }}
                   >
                     Back
-                  </Button>
+                  </Button> */}
                 </div>
               </Box>
             </StepContent>
@@ -135,4 +224,7 @@ export default function Orders() {
     </LayoutOne>
     </Fragment>
   );
+  else
+  return <p>Loading....
+    </p>
 }

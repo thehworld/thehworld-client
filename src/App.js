@@ -472,7 +472,7 @@ const App = () => {
               }
               /> 
               <Route
-                path={process.env.PUBLIC_URL + "/orderstatus"}
+                path={process.env.PUBLIC_URL + "/orderstatus/:orderId"}
                 element={
                 <UserRoutes>
                 <Orders />

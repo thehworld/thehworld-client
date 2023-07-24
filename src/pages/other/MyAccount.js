@@ -25,12 +25,12 @@ const MyAccount = () => {
   const [userLastName, setuserLastName] = useState("");
   const [userEmailId, setuserEmailId] = useState("");
   const [userPhone, setuserPhone] = useState("");
+  const [userWAPhone, setuserWAPhone] = useState("");
   const [userLocation, setuserLocation] = useState("");
   const [userOrders, setuserOrders] = useState([]);
-
+  const [userPincode, setuserPincode] = useState("");
 
   const [userAddress, setUserAddress] = useState("");
-  const [userWAPhone, setUSerWAPhone] = useState("");
 
 
   const [isLoading, setisLoading] = useState(false);
@@ -43,12 +43,16 @@ const MyAccount = () => {
           toast("Fetching...")
           console.log("User Res - ", res);
           console.log("User Res - ", res.data.orders);
+          
           setuser(res.data.user);
           setuserFirstName(res.data.user.userName);
           setuserLastName(res.data.user.userGoogleName);
           setuserEmailId(res.data.user.userEmail);
-          setuserLocation("");
-          
+          setuserPhone(res.data.user.contactNumber);
+          setuserWAPhone(res.data.user.contactWAForAuto);
+          setuserWAPhone(res.data.user.contactWAForAuto);
+          setuserLocation(res.data.user.userAddresses);
+          setuserPincode(res.data.user.userAddressPincode);
           
           setisLoading(false);
           if(res.data.orders.length > 0){
@@ -136,19 +140,36 @@ const navigate = useNavigate();
                               <div className="col-lg-6 col-md-6">
                                 <div className="billing-info">
                                   <label>Telephone</label>
-                                  <input type="text" />
+                                  <input type="text" value={userPhone ? userPhone: ""} onChange={(e) => setuserPhone(e.target.value)} />
+                                </div>
+                              </div>
+                              <div className="col-lg-6 col-md-6">
+                                <div className="billing-info">
+                                  <label>Phone WhatsApp</label>
+                                  <input type="text" value={userWAPhone ? userWAPhone: ""} onChange={(e) => setuserWAPhone(e.target.value)} />
                                 </div>
                               </div>
                               <div className="col-lg-6 col-md-6">
                                 <div className="billing-info">
                                   <label>Location</label>
-                                  <input type="text" />
+                                  <input type="text" value={userLocation ? userLocation: ""} onChange={(e) => setuserLocation(e.target.value)} />
+                                </div>
+                              </div>
+                              <div className="col-lg-6 col-md-6">
+                                <div className="billing-info">
+                                  <label>Pincode</label>
+                                  <input type="text" value={userPincode ? userPincode: ""} onChange={(e) => setuserPincode(e.target.value)} />
                                 </div>
                               </div>
                             </div>
                             <div className="billing-back-btn">
                               <div className="billing-btn">
-                                <button type="submit">Update</button>
+                                <button type="submit">Request Update</button>
+                              </div>
+                            </div>
+                            <div className="billing-back-btn">
+                              <div className="billing-btn">
+                                <button type="submit" onClick={() => window.open(`https://web.whatsapp.com/send?phone=+919677641176&text=${encodeURI(`Hi H World Team - I'm ${userFirstName} (${user._id}) - I'm Having Issues with an Order, contact me`)}&app_absent=0`)}>Request Issues in Order</button>
                               </div>
                             </div>
                           </div>
@@ -222,7 +243,8 @@ const navigate = useNavigate();
        </div>
        <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
          <div className="entries-edit-delete text-center">
-          <Link to='/orderstatus'>
+          <Link to={`/orderstatus/${order._id}`} 
+          >
            <button style={{padding: "5px"}}>Track Order</button>
            </Link>
          </div>
