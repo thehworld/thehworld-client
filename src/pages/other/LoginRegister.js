@@ -68,8 +68,9 @@ const LoginRegister = () => {
     userSignup(user).then((res) => {
       console.log('User Signup',res);
       if(res.data.token){
-        Cookies.set("TID",res.data.token); 
-        navigate("/")
+        console.log("TID - ", res.data.token);
+        Cookies.set("TID", res.data.token); 
+        // navigate("/")
       }
     }).catch((err) => {
         console.log('Error - ', err); 
