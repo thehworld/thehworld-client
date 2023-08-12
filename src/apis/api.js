@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 
 const API_AUTH = "https://thehworld-v1.onrender.com"
@@ -7,7 +8,7 @@ const API_SAUTH = "http://localhost:8080";
 const API_STAGING = "http://localhost:8080/api/web";
 
 
-const API_USE = API_STAGING;
+const API_USE = API_TESTING;
 const API_AUTH_USE = API_SAUTH;
 
 
@@ -55,9 +56,11 @@ export const removeCartHere = (id, token) => {
 
 
 export const userSignup = (user) => {
-    return axios.post(`${API_USE}/user/auth/google`, { user }).then((res) => {
-        if (res)
+    return axios.post(`${API_USE}/user/auth/google`, { user }, { withCredentials: true }).then((res) => {
+        if (res) {
+            Cookies.set("TID", res.data.token);
             return res;
+        }
     }).catch((error) => {
         console.log("Error - ", error);
     })

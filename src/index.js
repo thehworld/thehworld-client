@@ -5,6 +5,7 @@ import App from "./App";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { store } from "./store/store";
 import PersistProvider from "./store/providers/persist-provider";
+import { CookiesProvider } from 'react-cookie';
 import { setProducts } from "./store/slices/product-slice"
 import products from "./data/products.json";
 import 'animate.css';
@@ -22,9 +23,9 @@ const root = createRoot(container);
 root.render(
   <GoogleOAuthProvider clientId="920983269808-i5tjk4h12oimi0o6irfcjoapfqrdptst.apps.googleusercontent.com">
     <Provider store={store}>
-      <PersistProvider>
+    <CookiesProvider>
         <App />
-      </PersistProvider>
+        </CookiesProvider>
     </Provider>
   </GoogleOAuthProvider>
 );

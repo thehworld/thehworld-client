@@ -10,6 +10,8 @@ import { useState } from "react";
 import jwt_decode from "jwt-decode";
 import { userIsAuth, userSignup } from "../../apis/api";
 import Cookies from "js-cookie";
+import { CookiesProvider } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
 
 const LoginRegister = () => {
@@ -38,6 +40,9 @@ const LoginRegister = () => {
     e.preventDefault();
 
   }
+
+
+  const [cookies, setCookie] = useCookies(['name']);
 
 
   const checkUserIsAuth = async() => {
@@ -69,8 +74,9 @@ const LoginRegister = () => {
       console.log('User Signup',res);
       if(res.data.token){
         Cookies.set("TID", res.data.token); 
+        setCookie('TID', res.data.token);
         console.log("TID - ", res.data.token);
-        navigate("/")
+        navigate("/");
       }
     }).catch((err) => {
         console.log('Error - ', err); 
