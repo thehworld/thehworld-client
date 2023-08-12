@@ -48,6 +48,7 @@ const userLogout = (e) => {
   Cookies.remove('TID');
   Cookies.remove('name');
   navigate("/")
+  window.location.reload(false);
 }
 
 

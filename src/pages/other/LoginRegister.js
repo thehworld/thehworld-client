@@ -12,6 +12,7 @@ import { userIsAuth, userSignup } from "../../apis/api";
 import Cookies from "js-cookie";
 import { CookiesProvider } from 'react-cookie';
 import { useCookies } from 'react-cookie';
+// import Cookies from 'universal-cookie';
 
 
 const LoginRegister = () => {
@@ -89,7 +90,7 @@ const LoginRegister = () => {
     <Fragment>
       <SEO
         titleTemplate="Login"
-        description="Login page of flone react minimalist eCommerce template."
+        description="The H World - Login"
       />
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}

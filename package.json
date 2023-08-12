@@ -44,6 +44,7 @@
         "redux": "^4.2.0",
         "redux-persist": "^6.0.0",
         "swiper": "^8.4.4",
+        "universal-cookie": "^4.0.4",
         "uuid": "^9.0.0",
         "yet-another-react-lightbox": "^2.2.0"
     },
