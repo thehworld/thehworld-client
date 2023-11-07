@@ -11,6 +11,7 @@ import TestRouter from "./pages/other/TestRouter";
 import UserRoutes from "./routes/UsersRoutes";
 import PaymentSuccessPage from "./pages/other/PaymentLoadingPage";
 import Orders from "./pages/other/Orders";
+import BlogSection from "./wrappers/blog-featured/BlogSection";
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -146,6 +147,25 @@ const App = () => {
               </div>
             }
           >
+            <div style={{
+              width:'100%',
+              height:55,
+              textAlign:'center',
+              backgroundColor:'#008120',
+              justifyContent:'center',
+              alignItems:'center'
+            }}>
+              <p style={{
+                color:'white',
+                fontSize:18,
+                paddingTop:15,
+                
+              }}>
+             OFFER CODE <span style={{
+              fontWeight:'700'
+             }}>📢 THWBUZZ20 🎉</span>
+              </p>
+            </div>
             <Routes>
               
               <Route
@@ -160,6 +180,11 @@ const App = () => {
               <Route
                 path={process.env.PUBLIC_URL + "/"}
                 element={<HomeCosmetics />}
+              />
+             
+              <Route
+                path={process.env.PUBLIC_URL + "/blog/:bId"}
+                element={<BlogSection />}
               />
              
               <Route

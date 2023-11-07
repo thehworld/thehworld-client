@@ -11,7 +11,7 @@ import { Fragment } from 'react';
 import SEO from '../../components/seo';
 import LayoutOne from '../../layouts/LayoutOne';
 import { Container } from 'react-bootstrap';
-import { getAOrderDetails } from '../../apis/api';
+import { changeOrderStatus, getAOrderDetails } from '../../apis/api';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
@@ -58,6 +58,46 @@ const steps = [
   {
     label: 'Delivered',
     stage: "DELIVERED",
+    description: `Try out different ad text to see what brings in the most customers,
+              and learn how to enhance your ads using features like ad extensions.
+              If you run into any problems with your ads, find out how to tell if
+              they're running and how to resolve approval issues.`,
+  },
+  {
+    label: 'Return This Order',
+    stage: "RETURN INIT",
+    description: `Try out different ad text to see what brings in the most customers,
+              and learn how to enhance your ads using features like ad extensions.
+              If you run into any problems with your ads, find out how to tell if
+              they're running and how to resolve approval issues.`,
+  },
+  {
+    label: 'Return Success',
+    stage: "RETURN DONE",
+    description: `Try out different ad text to see what brings in the most customers,
+              and learn how to enhance your ads using features like ad extensions.
+              If you run into any problems with your ads, find out how to tell if
+              they're running and how to resolve approval issues.`,
+  },
+  {
+    label: 'Refund Initiated',
+    stage: "REFUND INIT",
+    description: `Try out different ad text to see what brings in the most customers,
+              and learn how to enhance your ads using features like ad extensions.
+              If you run into any problems with your ads, find out how to tell if
+              they're running and how to resolve approval issues.`,
+  },
+  {
+    label: 'Refunded',
+    stage: "REFUNDED",
+    description: `Try out different ad text to see what brings in the most customers,
+              and learn how to enhance your ads using features like ad extensions.
+              If you run into any problems with your ads, find out how to tell if
+              they're running and how to resolve approval issues.`,
+  },
+  {
+    label: 'Order Calcelled',
+    stage: "CANCELLED",
     description: `Try out different ad text to see what brings in the most customers,
               and learn how to enhance your ads using features like ad extensions.
               If you run into any problems with your ads, find out how to tell if
@@ -114,6 +154,21 @@ export default function Orders() {
                 case "DELIVERED":
                   setActiveStep(5)
                   break;
+                case "RETURN INIT":
+                  setActiveStep(6)
+                  break;
+                case "RETURN DONE":
+                  setActiveStep(7)
+                  break;
+                case "REFUND INIT":
+                  setActiveStep(8)
+                  break;
+                case "REFUNDED":
+                  setActiveStep(9)
+                  break;
+                case "CANCELLED":
+                  setActiveStep(10)
+                  break;
                 default:
                   setActiveStep(0);
                   break;
@@ -123,6 +178,21 @@ export default function Orders() {
         });
 
   }
+
+  const orderChangeHandler = (e, status, id) => {
+    e.preventDefault();
+    console.log("Status - ", status, id);
+    changeOrderStatus({status, id}).then((res) => {
+      console.log(res);
+      if(res.data.order){
+        console.log("Order Status - ", res.data.order);
+        window.location.reload(false);
+      }
+    }).catch((err) => {
+      console.log("Error - ", err);
+    })
+  }
+
 
 
   useEffect(() => {
@@ -208,6 +278,19 @@ export default function Orders() {
                 </div>
               </Box>
             </StepContent>
+            {step.label === "Delivered" && step.label != "Packed" ? (
+              <div>
+              <button style={{padding: "5px"}} onClick={(e) => orderChangeHandler(e, userOrders,"RETURN INIT")}>Return</button>
+              </div>
+            ):(null) 
+            }
+            {step.label === "Packed" && step.label != "Delivered" ? (
+              <div>
+              <button style={{padding: "5px"}} onClick={(e) => orderChangeHandler(e, userOrders,"CANCELLED")}>Cancel</button>
+              </div>
+            ):(null) 
+             
+            }
           </Step>
         ))}
       </Stepper>

@@ -1,16 +1,22 @@
-[
-  {
-    "id": "1",
-    "image": "/assets/img/testimonial/testi3.jpg",
-    "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    "customerName": "Grace Alvarado",
-    "title": "customer"
-  },
-  {
-    "id": "2",
-    "image": "/assets/img/testimonial/testi4.jpg",
-    "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    "customerName": "John Doe",
-    "title": "customer"
-  }
+[{
+        "id": "1",
+        "image": "/assets/img/testimonial/testi3.jpg",
+        "content": "I've been using The H Worlds Herbal Hair Gel for a few months now, and I'm absolutely thrilled with the results. My hair has always been a bit lackluster, but this gel has breathed new life into it. It not only gives my hair a healthy shine but also keeps my unruly frizz in check. Plus, the herbal ingredients make my hair feel soft and nourished. I can confidently say that this gel has improved the overall health and appearance of my hair.",
+        "customerName": "Rajesh G.V",
+        "title": "customer"
+    },
+    {
+        "id": "2",
+        "image": "/assets/img/testimonial/testi4.jpg",
+        "content": "I can't thank The H Worlds enough for creating this amazing herbal hair gel. My hair used to be brittle and prone to breakage, but after using this product consistently, I've noticed a significant improvement. My hair feels stronger, and I've even noticed new growth in areas where I was experiencing thinning. I love that it's made from natural ingredients too. It's a game-changer for anyone looking to improve their hair's health.",
+        "customerName": "Varun Das",
+        "title": "customer"
+    },
+    {
+        "id": "3",
+        "image": "/assets/img/testimonial/testi4.jpg",
+        "content": "I've struggled with dandruff for years, and nothing seemed to work until I discovered The H Worlds Herbal Hair Gel. Not only does it style my hair beautifully, but it has also banished my dandruff problems. It feels incredibly soothing on my scalp, and I can see a marked improvement in the flakiness and itching. My hair looks and feels healthier than ever. This gel is a lifesaver!",
+        "customerName": "Arun Pillai",
+        "title": "customer"
+    }
 ]

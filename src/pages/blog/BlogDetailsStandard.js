@@ -13,8 +13,8 @@ const BlogDetailsStandard = () => {
   return (
     <Fragment>
       <SEO
-        titleTemplate="Blog Post"
-        description="Blog Post of flone react minimalist eCommerce template."
+        titleTemplate="The H World - Blog Post"
+        description="The H World Hair Gel: Nature's Secret to Perfect Hair"
       />
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}

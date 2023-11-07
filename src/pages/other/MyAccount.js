@@ -6,7 +6,7 @@ import Accordion from "react-bootstrap/Accordion";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import { getUserDetails } from "../../apis/api";
+import { getUserDetails, orderProblemMyAccount } from "../../apis/api";
 import Cookies from "js-cookie";
 import { useState } from "react";
 
@@ -80,6 +80,16 @@ const navigate = useNavigate();
     Cookies.remove('TID');
     Cookies.remove('name');
     navigate("/")
+  }
+
+
+  const orderProblem = (e, order) => {
+      e.preventDefault();
+      orderProblemMyAccount({order}).then((res) => {
+        console.log("Order Problem - ", res);
+      }).catch((err) => {
+        console.log("Error - ", err);
+      });
   }
 
   return (
@@ -169,7 +179,7 @@ const navigate = useNavigate();
                             </div>
                             <div className="billing-back-btn">
                               <div className="billing-btn">
-                                <button type="submit" onClick={() => window.open(`https://web.whatsapp.com/send?phone=+919677641176&text=${encodeURI(`Hi H World Team - I'm ${userFirstName} (${user._id}) - I'm Having Issues with an Order, contact me`)}&app_absent=0`)}>Request Issues in Order</button>
+                                <button type="submit" onClick={() => window.open(`https://web.whatsapp.com/send?phone=+919677641176&text=${encodeURI(`Hi H World Team - I'm ${userFirstName} (${user._id}) - I'm Having Issues with an Order, contact me`)}`)}>Request Issues in Order</button>
                               </div>
                             </div>
                           </div>
@@ -229,7 +239,7 @@ const navigate = useNavigate();
    </div>
    <div className="entries-wrapper">
      <div className="row">
-      {order.orderProduct.map((product, index) => {
+      {order.paymentResponse && order.paymentResponse.code === "PAYMENT_SUCCESS" &&  order.orderProduct.map((product, index) => {
           return(
             <>
  
@@ -247,6 +257,9 @@ const navigate = useNavigate();
           >
            <button style={{padding: "5px"}}>Track Order</button>
            </Link>
+          
+           <button style={{padding: "5px"}} onClick={(e) => orderProblem(e, order)}>Order Problem</button>
+
          </div>
        </div>
             </>

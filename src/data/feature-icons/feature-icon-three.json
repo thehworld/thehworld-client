@@ -1,20 +1,19 @@
-[
-  {
-    "id": 1,
-    "image": "/assets/img/icon-img/support-1.png",
-    "title": "Free Shipping",
-    "subtitle": "Free shipping on all order"
-  },
-  {
-    "id": 2,
-    "image": "/assets/img/icon-img/support-2.png",
-    "title": "Support 24/7",
-    "subtitle": "Free shipping on all order"
-  },
-  {
-    "id": 3,
-    "image": "/assets/img/icon-img/support-3.png",
-    "title": "Money Return",
-    "subtitle": "Free shipping on all order"
-  }
+[{
+        "id": 1,
+        "image": "/assets/img/icon-img/support-1.png",
+        "title": "Free Shipping above ₹1500",
+        "subtitle": "Free shipping on all order above ₹1500"
+    },
+    {
+        "id": 2,
+        "image": "/assets/img/icon-img/support-2.png",
+        "title": "Support 24/7",
+        "subtitle": "24/7 Customer Support"
+    },
+    {
+        "id": 3,
+        "image": "/assets/img/icon-img/support-3.png",
+        "title": "Exiting Offers",
+        "subtitle": "Exciting Offers for all orders"
+    }
 ]

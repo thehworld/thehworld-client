@@ -154,3 +154,75 @@ export const getAllProductsFromCategory = (cateId) => {
             console.log("Error - ", err);
         });
 }
+
+export const makeStatusUpdateView = () => {
+    return axios.post(`${API_USE}/status/update`, { status: "View" })
+        .then((res) => {
+            return res;
+        }).catch((err) => {
+            console.log("Error - ", err);
+        });
+}
+
+export const makeStatusUpdateViewProduct = () => {
+    return axios.post(`${API_USE}/status/update/product`, { status: "View" })
+        .then((res) => {
+            return res;
+        }).catch((err) => {
+            console.log("Error - ", err);
+        });
+}
+
+
+export const getAllBlogs = () => {
+    return axios.get(`${API_USE}/get/all/blogs`)
+        .then((res) => {
+            return res
+        }).catch((error) => {
+            console.log(error);
+        });
+}
+
+export const getABlog = (bId) => {
+    return axios.get(`${API_USE}/get/a/blog/${bId}`)
+        .then((res) => {
+            return res
+        }).catch((err) => {
+            console.log(err)
+        });
+}
+
+// My Acccount
+
+export const changeOrderStatus = (status) => {
+    console.log(status);
+    return axios.post(`${API_USE}/order/change/shipment/user`, {
+        status: status
+    }).then((res) => {
+        return res
+    }).catch((error) => {
+        console.log("Error - ", error);
+    });
+}
+
+// Apply Offer Here
+
+export const applyOfferHere = (code) => {
+    return axios.get(`${API_USE}/get/offer/${code}`).then((res) => {
+        return res
+    }).catch((error) => {
+        return error
+    });
+}
+
+
+// Order Issue
+
+export const orderProblemMyAccount = (order) => {
+    return axios.post(`${API_USE}/problem/order`, order)
+        .then((res) => {
+            return res;
+        }).catch((err) => {
+            console.log("Error - ", err);
+        });
+}

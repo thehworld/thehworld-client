@@ -7,7 +7,7 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { addToCart, decreaseQuantity, deleteFromCart, deleteAllFromCart } from "../../store/slices/cart-slice";
 import { cartItemStock } from "../../helpers/product";
-import { getUserDetails, removeCartHere } from "../../apis/api";
+import { getUserDetails, makeStatusUpdateViewProduct, removeCartHere } from "../../apis/api";
 import Cookies from "js-cookie";
 
 const Cart = () => {
@@ -48,11 +48,22 @@ const Cart = () => {
   }
 
 
+  
+
+  const makeStatsUpdate = () => {
+    makeStatusUpdateViewProduct().then((res) => {
+        console.log("E-Commerce Views - ", res);
+    }).catch((error) => {
+        console.log("Error - ", error);
+    })
+  }
+
 
   const [cartRenderStatus, setcartRenderStatus] = useState(false);
 
   useEffect(() => {
     fetchCartData()
+    makeStatsUpdate()
 }, [cartRenderStatus])
 
 
@@ -70,7 +81,7 @@ const Cart = () => {
       })
   }
 
-  
+
   return (
     <Fragment>
       <SEO
@@ -86,7 +97,7 @@ const Cart = () => {
             {label: "Cart", path: process.env.PUBLIC_URL + pathname }
           ]} 
         /> */}
-        {console.log("Here Cart - ", cartItems)}
+        {/* {console.log("Here Cart - ", cartItems)} */}
         <div className="cart-main-area pt-90 pb-100">
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (
@@ -281,24 +292,6 @@ const Cart = () => {
                     </div>
                   </div> */}
 
-                  <div className="col-lg-4 col-md-6">
-                    <div className="discount-code-wrapper">
-                      <div className="title-wrap">
-                        <h4 className="cart-bottom-title section-bg-gray">
-                          Use Coupon Code
-                        </h4>
-                      </div>
-                      <div className="discount-code">
-                        <p>Enter your coupon code if you have one.</p>
-                        <form>
-                          <input type="text" required name="name" />
-                          <button className="cart-btn-2" type="submit" onClick={() => window.location.replace("https://google.in")}>
-                            Apply Coupon
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
 
                   <div className="col-lg-4 col-md-12">
                     <div className="grand-totall">
@@ -325,6 +318,25 @@ const Cart = () => {
                       </Link>
                     </div>
                   </div>
+                  {/* <div className="col-lg-4 col-md-6">
+                    <div className="discount-code-wrapper">
+                      <div className="title-wrap">
+                        <h4 className="cart-bottom-title section-bg-gray">
+                          Use Coupon Code
+                        </h4>
+                      </div>
+                      <div className="discount-code">
+                        <p>Enter your coupon code if you have one.</p>
+                        <form>
+                          <input type="text" required name="code" value={offerCode} onChange={(e) => setofferCode(e.target.value)}/>
+                          <button className="cart-btn-2" type="submit" onClick={(e) => applyOfferCode(e)}>
+                            Apply Coupon
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div> */}
+
                 </div>
               </Fragment>
             ) : (

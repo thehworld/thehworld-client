@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import TestimonialOne from "../../wrappers/testimonial/TestimonialOne";
@@ -8,8 +8,25 @@ import HeroSliderEight from "../../wrappers/hero-slider/HeroSliderEight";
 import FeatureIconThree from "../../wrappers/feature-icon/FeatureIconThree";
 import BannerNine from "../../wrappers/banner/BannerNine";
 import TabProductFive from "../../wrappers/product/TabProductFive";
+import { makeStatusUpdateView } from "../../apis/api";
 
 const HomeCosmetics = () => {
+
+
+  const makeStatsUpdate = () => {
+    makeStatusUpdateView().then((res) => {
+        console.log("E-Commerce Views - ", res);
+    }).catch((error) => {
+        console.log("Error - ", error);
+    })
+  }
+
+  useEffect(() => {
+      makeStatsUpdate()
+  }, [])
+
+
+
   return (
     <Fragment>
       <SEO

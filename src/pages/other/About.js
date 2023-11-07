@@ -16,8 +16,8 @@ const About = () => {
   return (
     <Fragment>
       <SEO
-        titleTemplate="About us"
-        description="About page of flone react minimalist eCommerce template."
+        titleTemplate="The H World - About us"
+        description="The H World - About the brand and company"
       /> 
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
@@ -32,23 +32,23 @@ const About = () => {
         <SectionTitleWithText spaceTopClass="pt-100" spaceBottomClass="pb-95" />
 
         {/* banner */}
-        <BannerOne spaceBottomClass="pb-70" />
+        {/* <BannerOne spaceBottomClass="pb-70" /> */}
 
         {/* text grid */}
-        <TextGridOne spaceBottomClass="pb-70" />
+        {/* <TextGridOne spaceBottomClass="pb-70" /> */}
 
         {/* fun fact */}
-        <FunFactOne
+        {/* <FunFactOne
           spaceTopClass="pt-100"
           spaceBottomClass="pb-70"
           bgClass="bg-gray-3"
-        />
+        /> */}
 
         {/* team member */}
-        <TeamMemberOne spaceTopClass="pt-95" spaceBottomClass="pb-70" />
+        {/* <TeamMemberOne spaceTopClass="pt-95" spaceBottomClass="pb-70" /> */}
 
         {/* brand logo slider */}
-        <BrandLogoSliderOne spaceBottomClass="pb-70" />
+        {/* <BrandLogoSliderOne spaceBottomClass="pb-70" /> */}
       </LayoutOne>
     </Fragment>
   );

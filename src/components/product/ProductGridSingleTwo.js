@@ -53,7 +53,7 @@ const ProductGridSingleTwo = ({
           {product.productDiscountPrice || product.productDiscountPrice ? (
             <div className="product-img-badges">
               {product.productDiscountPrice ? (
-                <span className="pink">-10%</span>
+                <span className="pink">New Offer</span>
               ) : (
                 ""
               )}
@@ -81,22 +81,21 @@ const ProductGridSingleTwo = ({
                 <i className="fa fa-cog"></i>
               </Link>
             ) : product.stock && product.stock > 0 ? (
-              <button
-                onClick={(e) => addProductToUserCart(e)}
+              <Link
+              to={`${process.env.PUBLIC_URL}/cart`}
+              title="Select options"
               >
-                {" "}
-                <i className="fa fa-shopping-cart"></i>{" "}
-              </button>
-            ) : (
-              <button disabled className="active" title="Out of stock">
                 <i className="fa fa-shopping-cart"></i>
-              </button>
+              </Link>
+            ) : (
+              <Link
+              to={`${process.env.PUBLIC_URL}/cart`}
+              title="Select options"
+              >
+                <i className="fa fa-shopping-cart"></i>
+              </Link>
             )}
-
-            <button onClick={() => setModalShow(true)} title="Quick View">
-              <i className="fa fa-eye"></i>
-            </button>
-
+             
             {/* <button
               className={compareItem !== undefined ? "active" : ""}
               disabled={compareItem !== undefined}

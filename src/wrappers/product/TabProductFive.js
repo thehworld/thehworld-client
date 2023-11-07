@@ -78,9 +78,22 @@ const TabProductFive = ({
         })
   }
 
+  
+  const getAAutoProductDetails = () => {
+        getAllProductsFromCategory("64b707d4226e9f272c0a4533").then((res) => {
+              console.log("All Products From Category Auto - ", res);
+              setproductDetails(res);
+        }).catch((err) => {
+              console.log(err);
+        })
+  }
+
+  
+
 
   useEffect(() => {
       getAllCategoryHandler()
+      getAAutoProductDetails()
   }, [])
   
 
@@ -88,7 +101,7 @@ const TabProductFive = ({
   return (
     <div className={clsx("product-area", spaceTopClass, spaceBottomClass)}>
       <div className="container">
-        <Tab.Container defaultActiveKey="newArrival">
+        <Tab.Container defaultActiveKey="Hair Care">
           <Nav
             variant="pills"
             className={clsx("product-tab-list-2 mb-60", productTabClass)}
@@ -102,7 +115,7 @@ const TabProductFive = ({
                 {allCategories && allCategories.map((cate, index) => {
                     return(
                 <Nav.Item onClick={(e) => getAProductDetails(e, cate._id)}>
-                  <Nav.Link eventKey="newArrival">
+                  <Nav.Link eventKey="Hair Care">
                     <h3>{cate.categoryName}</h3>
                   </Nav.Link>
                 </Nav.Item>
@@ -114,7 +127,7 @@ const TabProductFive = ({
           
           </Nav>
           <Tab.Content>
-            <Tab.Pane eventKey="newArrival">
+            <Tab.Pane eventKey="Hair Care">
               <div className="row">
                 <ProductGridTwo
                   category={category}
@@ -132,7 +145,6 @@ const TabProductFive = ({
         <div className="view-more text-center mt-20 toggle-btn6 col-12">
           <Link
             className="loadMore6"
-            to={process.env.PUBLIC_URL + "/shop-grid-standard"}
           >
             VIEW MORE PRODUCTS
           </Link>

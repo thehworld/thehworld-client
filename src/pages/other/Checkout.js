@@ -6,7 +6,7 @@ import { getDiscountPrice } from "../../helpers/product";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import { getUserDetails, userOrderProductFromCart } from "../../apis/api";
+import { applyOfferHere, getUserDetails, userOrderProductFromCart } from "../../apis/api";
 import Cookies from "js-cookie";
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -140,10 +140,16 @@ const Checkout = () => {
       cartTotalPrice += cartItem.product.productPrice * cartItem.qty
       cartSubTotalPrice += cartItem.product.productDiscountPrice * cartItem.qty
     });
+    cartTotalPrice = cartTotalPrice + 60;
     setuserOrderGrandTotal(cartTotalPrice);
     setuserOrderSubTotal(cartSubTotalPrice);
   }, [])
   
+  
+  const [offerCode, setofferCode] = useState("");
+  const [offerCodeValue, setofferCodeValue] = useState("");
+
+
 
   const placeOrder = (e) => {
       e.preventDefault();
@@ -157,6 +163,11 @@ const Checkout = () => {
         cartTotalPrice += cartItem.product.productPrice * cartItem.qty
         cartSubTotalPrice += cartItem.product.productDiscountPrice * cartItem.qty
       });
+      cartTotalPrice = cartTotalPrice + cartTotalPrice * 0.18;
+      // cartTotalPrice = cartTotalPrice + 60; // Delivery Charge
+      if(offerCodeValue){
+          cartTotalPrice = cartTotalPrice - ( cartTotalPrice * (offerCodeValue / 100))
+      }
       setuserOrderGrandTotal(cartTotalPrice);
       setuserOrderSubTotal(cartSubTotalPrice);
       const data = {
@@ -209,6 +220,34 @@ const Checkout = () => {
     setuserPaymentOpions(event.target.value);   
   }
   
+
+
+  // Applied Coupon
+  const [userHaveAppliedCoupon, setuserHaveAppliedCoupon] = useState(false);
+
+  
+
+  const applyOfferCode = (e) => {
+        e.preventDefault();
+        if(offerCode){
+            //orderisOffer
+            console.log("Offer Code - ", offerCode);
+            applyOfferHere(offerCode).then((res) => {
+              console.log(res);
+              setofferCodeValue(res.data.code.value);
+              if(res.data.code.value)
+              cartTotalPrice = cartTotalPrice - ( cartTotalPrice * (offerCodeValue / 100));
+              setuserHaveAppliedCoupon(true);
+            }).catch((error) => {
+                console.log("Error - ", error);
+            })
+        }
+  }
+
+
+
+
+
   if(checkout){
     return(
       <div style={{
@@ -217,21 +256,21 @@ const Checkout = () => {
       }}>
         
       <Box sx={{ minWidth: 120 }} style={{
-          marginTop:220
+          marginTop:320
       }}>
         <p style={{
           marginRight:15,
           marginLeft:15,
-          fontWeight: 700
+          fontWeight: 700,
         }}>
             Pick Payment Options
         </p>
       <FormControl  style={{
             marginRight:15,
             marginLeft:15,
-            width:"90%"
+            width:"90%",
       }}>
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <InputLabel id="demo-simple-select-label">Payment Option</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
@@ -240,7 +279,7 @@ const Checkout = () => {
           onChange={changePaymentOptions}
         >
           <MenuItem value={'CARD'}>Card Payment</MenuItem>
-          <MenuItem value={'COD'}>Cash on Delivery</MenuItem>
+          {/* <MenuItem value={'COD'}>Cash on Delivery</MenuItem> */}
         </Select>
         <div className="place-order mt-25">
             <button className="btn-hover" onClick={(e) => placeOrder(e)}>Place Order</button>
@@ -256,7 +295,7 @@ else
     <Fragment>
       <SEO
         titleTemplate="Checkout"
-        description="Checkout page of flone react minimalist eCommerce template."
+        description="The H World - Checkout"
       />
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
@@ -410,13 +449,13 @@ else
                         <div className="your-order-bottom">
                           <ul>
                             <li className="your-order-shipping">Shipping</li>
-                            <li>100</li>
+                            <li>60</li>
                           </ul>
                         </div>
                         <div className="your-order-total">
                           <ul>
                             <li className="order-total">Sub Total</li>
-                            {cartTotalPrice.toFixed(2)}
+                            {cartTotalPrice + 60}
                           </ul>
                         </div>
                         <div className="your-order-bottom">
@@ -426,10 +465,28 @@ else
                           </ul>
                         </div>
                         <div className="your-order-total">
-                          <ul>
-                            <li className="order-total">Total</li>
-                            {cartTotalPrice + (cartTotalPrice * 0.18)}
-                          </ul>
+                          <>
+                            {userHaveAppliedCoupon ? (
+                              <ul>
+                              <li className="order-total">Total<p><b>Offer Coupon Applied ${offerCodeValue}%</b></p></li>
+                              <p style={{textDecoration: 'line-through'}}>{cartTotalPrice + (cartTotalPrice * 0.18)}</p>
+                              <p style={{
+                                color:'green',
+                                fontSize:22,
+                              }}>{
+                                cartTotalPrice - ( cartTotalPrice * (offerCodeValue / 100))
+                              }</p>
+                            </ul>
+                            ) : (
+                              <ul>
+                              <li className="order-total">Total</li>
+                              {cartTotalPrice + (cartTotalPrice * 0.18)}
+                            </ul>    
+                            )
+
+                            }
+                          </>
+                          
                         </div>
                       </div>
                       <div className="payment-method"></div>
@@ -439,6 +496,24 @@ else
                     </div>
                   </div>
                 </div>
+                <div className="col-lg-4 col-md-6">
+                    <div className="discount-code-wrapper">
+                      <div className="title-wrap">
+                        <h4 className="cart-bottom-title section-bg-gray">
+                          Use Coupon Code
+                        </h4>
+                      </div>
+                      <div className="discount-code">
+                        <p>Enter your coupon code if you have one.</p>
+                        <form>
+                          <input type="text" required name="code" value={offerCode} onChange={(e) => setofferCode(e.target.value)}/>
+                          <button className="cart-btn-2" type="submit" onClick={(e) => applyOfferCode(e)}>
+                            Apply Coupon
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
               </div>
             ) : (
               <div className="row">
@@ -459,6 +534,7 @@ else
             )}
           </div>
         </div>
+        
       </LayoutOne>
     </Fragment>
   );
