@@ -3,7 +3,7 @@ import cogoToast from 'cogo-toast';
 const { createSlice } = require('@reduxjs/toolkit');
 
 const cartSlice = createSlice({
-    name: "cart",
+    name: "cart", 
     initialState: {
         cartItems: []
     },

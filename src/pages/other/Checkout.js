@@ -13,6 +13,35 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Typography from '@mui/material/Typography';
+
+// Regular Expression 
+const RegularExpression = {
+  checkemail : /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 
+  checkphone: /^\d{10}$/ ,
+  checkpincode : /^\d{6}$/ ,
+
+} 
+
+// Material UI Box Styling
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: '#ffffff', 
+  border: '1px solid #ccc', 
+  borderRadius: '10px', 
+  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)', 
+  padding: '20px',
+  boxSizing: 'border-box', 
+  outline: 'none', 
+};
+
 
 const Checkout = () => {
 
@@ -47,6 +76,11 @@ const Checkout = () => {
   const [userOrderNotes, setuserOrderNotes] = useState("");
   const [userOrderProduct, setuserOrderProduct] = useState([]);
   const [userPaymentOpions, setuserPaymentOpions] = useState("");
+  const [couponmessage,setCouponMessage] = useState({
+                                                     message:"",
+                                                     error:"",
+                                                     isSuccess:false
+                                                  })
 
 
   const [userOrderSubTotal, setuserOrderSubTotal] = useState("");
@@ -88,7 +122,7 @@ const Checkout = () => {
           }
           
           setuserLocation("");
-          setisLoading(false);
+          // setisLoading(false);
         }).catch((error) => {
           console.log("Error - ", error);
       })
@@ -111,6 +145,7 @@ const Checkout = () => {
   const [cartspecific, setcartspecific] = useState(0);
 
   const fetchCartData = () => {
+    setisLoading(true);
     const token = Cookies.get("TID");
     if(token)
     getUserDetails(token).then((res) => {
@@ -118,7 +153,7 @@ const Checkout = () => {
           console.log("Cart - ", res.data.user.userCart);
           setcart(res.data.user.userCart);
           setuserOrderProduct(res.data.user.userCart);
-          
+          setisLoading(false);
     }).catch((err) => {
           console.log("Error - ", err);
     })
@@ -183,7 +218,8 @@ const Checkout = () => {
             userOrderNote,
             userTown:userCityTown,
             userAddressTwo,
-            paymentOptions: userPaymentOpions,
+            // paymentOptions: userPaymentOpions,
+            paymentOptions: "CARD",
             userHome,
             userOrderSubTotal :cartSubTotalPrice,
             userOrderGrandTotal: cartTotalPrice,
@@ -233,16 +269,39 @@ const Checkout = () => {
             //orderisOffer
             console.log("Offer Code - ", offerCode);
             applyOfferHere(offerCode).then((res) => {
-              console.log(res);
-              setofferCodeValue(res.data.code.value);
-              if(res.data.code.value)
+              console.log(res.data);
+              
+              if(res.data.code){
               cartTotalPrice = cartTotalPrice - ( cartTotalPrice * (offerCodeValue / 100));
               setuserHaveAppliedCoupon(true);
+              setofferCodeValue(res.data.code.value);
+              setofferCode("");
+              setCouponMessage({message:"Coupon Applied Successfully",isSuccess:true ,error:"" })
+              setTimeout(()=>{
+              setCouponMessage(PREVIOUS=>({...PREVIOUS ,isSuccess:false }));
+              window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+              });
+              },2000)
+              }
+              else{
+                // console.log("invalid coupon!!!");
+              setCouponMessage({message:"",isSuccess:false ,error:"Invalid Coupon" });
+              }
             }).catch((error) => {
                 console.log("Error - ", error);
             })
-        }
+        }    
   }
+
+   const CouponModelCloseHandler = ()=>{
+    setCouponMessage(previous=>({...previous , isSuccess : false}));
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+}
 
 
 
@@ -305,6 +364,16 @@ else
             {label: "Checkout", path: process.env.PUBLIC_URL + "/chekout" }
           ]} 
         /> */}
+        {
+
+         isLoading ?
+         <div style={{display: "flex", justifyContent: "center", alignItems: "center",minHeight:'80vh'}}>
+                <div className="flone-preloader">
+                  <span></span>
+                  <span></span>
+                </div>              
+            </div>
+            :
         <div className="checkout-area pt-95 pb-100">
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (
@@ -492,7 +561,11 @@ else
                       <div className="payment-method"></div>
                     </div>
                     <div className="place-order mt-25">
-                      <button className="btn-hover" onClick={() => setcheckout(true)}>Place Order</button>
+                      <button className="btn-hover"
+                      //  onClick={() => setcheckout(true)}
+                      onClick={(e) => placeOrder(e)}
+                       disabled={!userFirstName || !userLastName || !userAddress || !userCityTown || !(RegularExpression.checkemail.test(userEmailId)) || !(RegularExpression.checkpincode.test(userPincode)) || !(RegularExpression.checkphone.test(userPhone)) || !(userState != "Select a state") ||!(RegularExpression.checkphone.test(userWAPhone))}
+                      >Place Order</button>
                     </div>
                   </div>
                 </div>
@@ -506,6 +579,9 @@ else
                       <div className="discount-code">
                         <p>Enter your coupon code if you have one.</p>
                         <form>
+                        <Typography  variant="h6" color={'red'} component="h2">
+                            {couponmessage.error}
+                        </Typography>
                           <input type="text" required name="code" value={offerCode} onChange={(e) => setofferCode(e.target.value)}/>
                           <button className="cart-btn-2" type="submit" onClick={(e) => applyOfferCode(e)}>
                             Apply Coupon
@@ -534,6 +610,21 @@ else
             )}
           </div>
         </div>
+          }
+          
+         <Modal
+            open={couponmessage.isSuccess}
+            onClose={CouponModelCloseHandler}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+         >
+         <Box sx={{ ...style, width: 400 }}>
+          <Typography id="modal-modal-title" variant="h6" color={'green'} component="h2">
+          <CheckCircleIcon/> {couponmessage.message}
+          </Typography>
+          
+          </Box>
+        </Modal>
         
       </LayoutOne>
     </Fragment>

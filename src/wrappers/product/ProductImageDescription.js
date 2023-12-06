@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
+import { useSelector , useDispatch } from "react-redux";
+import  { addToCart } from "../.././store/slices/cart-slice";
 import clsx from "clsx";
 import { getDiscountPrice } from "../../helpers/product";
 import ProductImageGallery from "../../components/product/ProductImageGallery";
@@ -9,7 +10,7 @@ import ProductImageFixed from "../../components/product/ProductImageFixed";
 
 const ProductImageDescription = ({ spaceTopClass, spaceBottomClass, galleryType, product }) => {
   
-  console.log('product < ', product);
+  console.log('product < ', product); 
 
   return (
     <div className={clsx("shop-area", spaceTopClass, spaceBottomClass)}>

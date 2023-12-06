@@ -29,6 +29,7 @@ export const getUserDetails = (userToken) => {
 // ? User Cart
 
 export const userCartAddRemove = (product, opt, token) => {
+    console.log("product for cart data",product)
     return axios.post(`${API_USE}/user/add/cart`, { product, opt }, {
         headers: {
             token: token

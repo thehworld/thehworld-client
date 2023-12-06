@@ -1,13 +1,13 @@
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation , useNavigate } from "react-router-dom";
 import SEO from "../../components/seo";
 import { getDiscountPrice } from "../../helpers/product";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { addToCart, decreaseQuantity, deleteFromCart, deleteAllFromCart } from "../../store/slices/cart-slice";
 import { cartItemStock } from "../../helpers/product";
-import { getUserDetails, makeStatusUpdateViewProduct, removeCartHere } from "../../apis/api";
+import { getUserDetails, makeStatusUpdateViewProduct, removeCartHere , userCartAddRemove } from "../../apis/api";
 import Cookies from "js-cookie";
 
 const Cart = () => {
@@ -16,10 +16,7 @@ const Cart = () => {
   const [quantityCount] = useState(1);
   const dispatch = useDispatch();
   let { pathname } = useLocation();
-  
-
-
-
+  let navigate = useNavigate();
 
   
   const [userToken, setuserToken] = useState(Cookies.get("TID"))
@@ -33,15 +30,17 @@ const Cart = () => {
 
   const [cartItems, setcart] = useState([]);
   const [cartspecific, setcartspecific] = useState(0);
+  const [isLoading,setIsLoading] = useState(false);
 
   const fetchCartData = () => {
+    setIsLoading(true);
     const token = Cookies.get("TID");
     if(token)
     getUserDetails(token).then((res) => {
           console.log("Res - ", res.data);
           console.log("Cart - ", res.data.user.userCart);
           setcart(res.data.user.userCart);
-          
+          setIsLoading(false);
     }).catch((err) => {
           console.log("Error - ", err);
     })
@@ -51,35 +50,84 @@ const Cart = () => {
   
 
   const makeStatsUpdate = () => {
+  
     makeStatusUpdateViewProduct().then((res) => {
         console.log("E-Commerce Views - ", res);
+        
     }).catch((error) => {
         console.log("Error - ", error);
     })
+
   }
 
 
   const [cartRenderStatus, setcartRenderStatus] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     fetchCartData()
     makeStatsUpdate()
 }, [cartRenderStatus])
 
 
-  const removeCartItems = (e, id) => {
-      e.preventDefault();
-      const token = Cookies.get("TID");
-      console.log("Remove Cart Here - ", id)
-      removeCartHere(id, token).then((res) => {
-            console.log("Remove Cart - ", res);
-            if(res.data.cartuser){
-              setcartRenderStatus(!cartRenderStatus);
-            }
-      }).catch((err) => {
-          console.log("Error - ", err)
-      })
+// const removeCartItems = (e,id) => {
+//   e.preventDefault();
+//   const token = Cookies.get("TID");
+//   console.log("Remove Cart Here - ", id)
+//   removeCartHere(id, token).then((res) => {
+//         console.log("Remove Cart - ", res);
+//         if(res.data.cartuser){
+//           setcartRenderStatus(!cartRenderStatus);
+//         }
+//   }).catch((err) => {
+//       console.log("Error - ", err)
+//   })
+// }
+const removeCartItems = (e,product,id) => {
+  e.preventDefault();
+  UpdateproductQuantityInCart(product,0,id);
+
+}
+
+  const OnChangeProductQuantityIncart  =(e,product,Existingqty,id,functiontype)=>{
+    // console.log("datas",product,Existingqty,id,functiontype)
+        if("Add" === functiontype ){
+            let calculateQuantity = Existingqty + 1 ; 
+            UpdateproductQuantityInCart(product,calculateQuantity,id);
+        }
+        else{
+            let calculateQuantity = Existingqty - 1 ; 
+            UpdateproductQuantityInCart(product,calculateQuantity,id);
+        }
   }
+
+  const UpdateproductQuantityInCart = (product,qty,id) => {
+    const token = Cookies.get("TID");
+    if(token){
+    if(qty >= 0){
+      const cartObject = {
+        id: product._id,
+        product: product,
+        qty: qty
+      }
+      userCartAddRemove(cartObject,"Add",userToken).then((res) => {
+        fetchCartData();
+        setIsLoading(false);
+      }).catch((error) => {
+        console.log("Error - ", error);
+      });
+    }
+    else{
+      setIsLoading(false);
+    }
+  }
+    else{
+        navigate("/login-register");
+    }
+  
+
+  }
+
 
 
   return (
@@ -99,6 +147,16 @@ const Cart = () => {
         /> */}
         {/* {console.log("Here Cart - ", cartItems)} */}
         <div className="cart-main-area pt-90 pb-100">
+          {
+            isLoading ? 
+            <div style={{display: "flex", justifyContent: "center", alignItems: "center",minHeight:'80vh'}}>
+             <div className="flone-preloader">
+                <span></span>
+                <span></span>
+              </div>     
+          </div>
+          :
+          
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (
               <Fragment>
@@ -160,12 +218,12 @@ const Cart = () => {
                                 </td>
 
                                 <td className="product-price-cart">
-                                  {cartItem.product.productDiscountPrice !== null ? (
+                                  {cartItem.product.productPrice != 0 ? (
                                     <Fragment>
                                       <span className="amount old">
                                         {"₹" +
-                                          cartItem.product.productDiscountPrice}
-                                      </span>
+                                          cartItem.product.productPrice}
+                                      </span>{' - '}
                                       <span className="amount">
                                         {"₹" +
                                           cartItem.product.productDiscountPrice}
@@ -183,7 +241,8 @@ const Cart = () => {
                                   <div className="cart-plus-minus">
                                     <button
                                       className="dec qtybutton"
-                                     
+                                      onClick={(e)=>OnChangeProductQuantityIncart(e,cartItem.product,cartItem.qty,cartItem.id,"Minus")}
+                                       
                                     >
                                       -
                                     </button>
@@ -195,7 +254,7 @@ const Cart = () => {
                                     />
                                     <button
                                       className="inc qtybutton"
-                                      
+                                      onClick={(e)=>OnChangeProductQuantityIncart(e,cartItem.product,cartItem.qty,cartItem.id,"Add")}
                                     >
                                       +
                                     </button>
@@ -215,7 +274,7 @@ const Cart = () => {
 
                                 <td className="product-remove">
                                   <button
-                                      onClick={(e) => removeCartItems(e, cartItem.id)}
+                                      onClick={(e) => removeCartItems(e, cartItem.product ,cartItem.id)}
                                   >
                                     <i className="fa fa-times"></i>
                                   </button>
@@ -340,6 +399,8 @@ const Cart = () => {
                 </div>
               </Fragment>
             ) : (
+            
+             
               <div className="row">
                 <div className="col-lg-12">
                   <div className="item-empty-area text-center">
@@ -355,8 +416,10 @@ const Cart = () => {
                   </div>
                 </div>
               </div>
+            
             )}
           </div>
+         }
         </div>
       </LayoutOne>
     </Fragment>

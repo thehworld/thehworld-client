@@ -16,7 +16,7 @@ import { Box, CircularProgress, Typography, colors } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-const ProductDescriptionInfo = ({
+const ProductDescriptionInfo = ({ 
   product,
   discountedPrice,
   currency,
@@ -56,23 +56,26 @@ const ProductDescriptionInfo = ({
   }
 
   const [fetchProduct, setfetchProduct] = useState(false);
-
-
   const [isLoading, setisLoading] = useState(false);
+
+
   const addProductToCart = (e) => {
     e.preventDefault();
     setisLoading(true);
     const token = Cookies.get("TID");
     if(token){
+    if(cartspecific >= 0){
+
       console.log("Cart - ", cart === undefined);
       console.log(cart);
       const cartObject = {
         id: product._id,
         product: product,
-        qty: 1
+        qty: cartspecific
       }
       userCartAddRemove(cartObject,"Add",userToken).then((res) => {
-        setfetchProduct(!fetchProduct)
+        navigate("/cart");
+        // setfetchProduct(!fetchProduct)
         console.log(res);
         setisLoading(false);
       }).catch((error) => {
@@ -80,9 +83,17 @@ const ProductDescriptionInfo = ({
       });
     }
     else{
-        navigate("/login-register");
+      setisLoading(false);
     }
   }
+    else{
+        navigate("/login-register");
+    }
+  
+
+  }
+
+  
 
   const removeProductToCart = (e) => {
       e.preventDefault();
@@ -117,21 +128,38 @@ const ProductDescriptionInfo = ({
       fetchCartData()
   }, [fetchProduct])
   
+  // Increment Quantity for add to cart .
+ const INcrementQuantityHandler = (e)=>{
+           e.preventDefault();
+           let value = cartspecific + 1 ;
+             setcartspecific(value);
+ }
 
+ const DecrementQuantityHandler = (e)=>{
+           e.preventDefault();
+           if(cartspecific > 0){
+           let value = cartspecific - 1 ;
+           setcartspecific(value);
+           }
+            
+ }
 
   return (
     <div className="product-details-content ml-70">
       <h2>{product.productName}</h2>
       <div className="product-details-price">
-        {product.productDiscountPrice !== null ? (
+        {product.productPrice != 0  ? (
           <Fragment>
-            <span>{"₹" + product.productDiscountPrice}</span>{" "}
             <span className="old">
               {"₹" + product.productPrice}
-            </span>
+            </span>{" "} 
+            &nbsp;
+            &nbsp;
+            <span>{"₹" + product.productDiscountPrice}</span>
+            
           </Fragment>
         ) : (
-          <span>{"₹" + product.productPrice} </span>
+          <span>{"₹" + product.productDiscountPrice} </span>
         )}
       </div>
       {/* {product.rating && product.rating > 0 ? (
@@ -164,7 +192,7 @@ const ProductDescriptionInfo = ({
     >
       
       <Button
-      onClick={(e) => removeProductToCart(e, product)}
+      onClick={(e) => DecrementQuantityHandler(e, product)}
         style={{
           marginTop:0,
           borderRadius:1000,
@@ -197,7 +225,7 @@ const ProductDescriptionInfo = ({
     >
 
         <Button
-      onClick={(e) => addProductToCart(e, product)}
+      onClick={(e) => INcrementQuantityHandler(e, product)}
         style={{
           marginTop:0,
           
@@ -242,7 +270,7 @@ const ProductDescriptionInfo = ({
         }}
         variant="contained"
         sx={{ bgcolor: green[500], '&:hover': { bgcolor: green[700] } }}
-        onClick={() => navigate("/cart")}
+        onClick={(e) => addProductToCart(e)}
       >
         Add to Cart
       </Button>

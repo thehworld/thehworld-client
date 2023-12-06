@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import ProductGridTwo from "../../wrappers/product/ProductGridTwo";
+import LayoutOne from "../../layouts/LayoutOne";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { getAllCategories, getAllProductsFromCategory } from "../../apis/api";
@@ -51,6 +52,8 @@ const ShopGridStandard = ({
   const [isLoading, setisLoading] = useState(false);
   const [isError, setisError] = useState(false);
 
+  
+
 
   const getAllCategoryHandler = () => {
     setisLoading(true)  
@@ -69,10 +72,12 @@ const ShopGridStandard = ({
   const [productDetails, setproductDetails] = useState([]);
   const getAProductDetails = (e, id) => {
         e.preventDefault();
+        setisLoading(true)  
         setcategoryIdForProductDetails(id);
         getAllProductsFromCategory(id).then((res) => {
               console.log("All Products From Category - ", res);
               setproductDetails(res);
+              setisLoading(false);  
         }).catch((err) => {
               console.log(err);
         })
@@ -80,9 +85,11 @@ const ShopGridStandard = ({
 
   
   const getAAutoProductDetails = () => {
+    setisLoading(true)  
         getAllProductsFromCategory("64b707d4226e9f272c0a4533").then((res) => {
               console.log("All Products From Category Auto - ", res);
               setproductDetails(res);
+              setisLoading(false);  
         }).catch((err) => {
               console.log(err);
         })
@@ -92,25 +99,36 @@ const ShopGridStandard = ({
 
 
   useEffect(() => {
+      setisLoading(true)  
       getAllCategoryHandler()
       getAAutoProductDetails()
   }, [])
+
+
   
 
 
   return (
+    <LayoutOne
+        headerContainerClass="container-fluid"
+        headerPaddingClass="header-padding-1"
+      >
+         {isLoading ? (
+          <div style={{display: "flex", justifyContent: "center", alignItems: "center",minHeight:'90vh'}}>
+                <div className="flone-preloader">
+                  <span></span>
+                  <span></span>
+                </div>              
+          </div>
+          ) : (
     <div className={clsx("product-area", spaceTopClass, spaceBottomClass)}>
-      <div className="container">
+      <div className="container" style={{minHeight:"80vh"}}>
         <Tab.Container defaultActiveKey="Hair Care">
           <Nav
             variant="pills"
             className={clsx("product-tab-list-2 mb-60", productTabClass)}
           >
-            {isLoading ? (
-              <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-              <CircularProgress color="success" />
-            </div>
-            ) : (
+           
                 <>
                 {allCategories && allCategories.map((cate, index) => {
                     return(
@@ -123,7 +141,7 @@ const ShopGridStandard = ({
                 })
                 }
                 </>
-            )}
+            
           
           </Nav>
           <Tab.Content>
@@ -151,6 +169,8 @@ const ShopGridStandard = ({
         </div>
       </div>
     </div>
+      )}
+    </LayoutOne>
   );
 };
 

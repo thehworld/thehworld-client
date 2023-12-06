@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin , GoogleOAuthProvider} from '@react-oauth/google';
 import { Link, useLocation, redirect, Navigate, useNavigate  } from "react-router-dom"; 
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
@@ -124,6 +124,7 @@ const LoginRegister = () => {
                         <div className="login-form-container">
                         <h5 style={{textAlign: "center"}}>Login with Google</h5>
                         <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px"}}>
+                        <GoogleOAuthProvider clientId="920983269808-i5tjk4h12oimi0o6irfcjoapfqrdptst.apps.googleusercontent.com">
                           <GoogleLogin
                           onSuccess={credentialResponse => {
                             console.log("credentialResponse", credentialResponse);
@@ -136,6 +137,7 @@ const LoginRegister = () => {
                             console.log('Login Failed');
                           }}
                         />
+                        </GoogleOAuthProvider>
                         </div>
                         {/* <hr class="hr-text" data-content="OR" /> */}
                           {/* <div className="login-register-form">

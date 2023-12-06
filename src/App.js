@@ -398,7 +398,7 @@ const App = () => {
               <Route
                 path={process.env.PUBLIC_URL + "/product/:id"}
                 element={<Product />}
-              />
+              />   
               <Route
                 path={process.env.PUBLIC_URL + "/product-tab-left/:id"}
                 element={<ProductTabLeft/>}

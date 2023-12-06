@@ -106,6 +106,18 @@ const navigate = useNavigate();
             {label: "My Account", path: process.env.PUBLIC_URL + pathname }
           ]} 
         /> */}
+         {
+
+isLoading ?
+<div style={{display: "flex", justifyContent: "center", alignItems: "center",minHeight:'90vh'}}>
+       <div className="flone-preloader">
+         <span></span>
+         <span></span>
+       </div>              
+   </div>
+   :
+        <>
+        
         <div  style={{
           alignContent:'center'
         }}>
@@ -287,6 +299,8 @@ const navigate = useNavigate();
         <div style={{display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0"}}>
         <button onClick={userLogout} className="logout-btn">Logout</button>
         </div>
+        </>
+        }
       </LayoutOne>
     </Fragment>
   );

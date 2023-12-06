@@ -122,17 +122,18 @@ const ProductGridSingleTwo = ({
               </Link>
             </h3>
             <div className="price-2">
-              {product.productDiscountPrice !== null ? (
+              {product.productPrice != 0  ? (
                 <Fragment>
-                  <span>
-                    {'₹' + product.productDiscountPrice}
-                  </span>{" "}
                   <span className="old">
                     {'₹' + product.productPrice}
+                  </span>{" "}
+                  <span>
+                    {'₹' + product.productDiscountPrice}
                   </span>
+                  
                 </Fragment>
               ) : (
-                <span>{'₹' + product.productPrice} </span>
+                <span>{'₹' + product.productDiscountPrice} </span>
               )}
             </div>
           </div>

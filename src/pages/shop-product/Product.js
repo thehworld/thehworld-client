@@ -17,13 +17,16 @@ const Product = () => {
   console.log(id)
 
   const [productData, setproductData] = useState(null);
+  const [isLoading,setisLoading] = useState(false);
 
   const getProductDetailsFromId = () => {
+    setisLoading(true);
     if(id){
       console.log('id -> ',id);
       getAProductDetail(id).then((res) => {
         console.log("Product res- ", res.data.product);
         setproductData(res.data.product);
+        setisLoading(false);
       }).catch((err) => {
         console.log("error - ", err);
       })
@@ -52,9 +55,17 @@ const Product = () => {
             {label: "Home", path: process.env.PUBLIC_URL + "/" },
             {label: "Shop Product", path: process.env.PUBLIC_URL + productData.productName }
           ]} 
-        /> */}
-
-
+        /> */} 
+     {
+      isLoading ?
+       <div style={{display: "flex", justifyContent: "center", alignItems: "center",minHeight:'90vh'}}>
+       <div className="flone-preloader">
+         <span></span>
+         <span></span>
+       </div>              
+       </div>
+         :
+        <>
         {/* product description with image */}
         <ProductImageDescription
           spaceTopClass="pt-100"
@@ -73,7 +84,8 @@ const Product = () => {
           productFullDesc={productData}
         />
 
-   
+   </>
+     }
       </LayoutOne>
     </Fragment>
   );
