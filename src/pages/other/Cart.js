@@ -9,6 +9,27 @@ import { addToCart, decreaseQuantity, deleteFromCart, deleteAllFromCart } from "
 import { cartItemStock } from "../../helpers/product";
 import { getUserDetails, makeStatusUpdateViewProduct, removeCartHere , userCartAddRemove } from "../../apis/api";
 import Cookies from "js-cookie";
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Typography from '@mui/material/Typography';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: '#ffffff', 
+  border: '1px solid #ccc', 
+  borderRadius: '10px', 
+  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)', 
+  padding: '20px',
+  boxSizing: 'border-box', 
+  outline: 'none', 
+};
 
 const Cart = () => {
   let cartTotalPrice = 0;
@@ -21,6 +42,33 @@ const Cart = () => {
   
   const [userToken, setuserToken] = useState(Cookies.get("TID"))
 
+  useEffect(() => {
+    let timer;
+
+    // Function to be called after 2 seconds of inactivity
+    const handleTimeout = () => {
+      console.log('Button was not clicked in the last 2 seconds. Performing action...');
+      // Call your desired function here
+    };
+
+    // Reset the timer whenever the button is clicked
+    const handleClick = () => {
+      setProductCartCount((prevCount) => prevCount + 1);
+      clearTimeout(timer);
+      timer = setTimeout(handleTimeout, 2000);
+    };
+
+    return () => {
+      // Cleanup to clear the timer when the component unmounts
+      clearTimeout(timer);
+    };
+  }, [cartproductCount]);
+
+
+
+
+
+
 
 
   const getDiscountPrice = (price, discount) => {
@@ -31,6 +79,14 @@ const Cart = () => {
   const [cartItems, setcart] = useState([]);
   const [cartspecific, setcartspecific] = useState(0);
   const [isLoading,setIsLoading] = useState(false);
+  const [cartproductCount,setProductCartCount] = useState([]);
+  const [cartmodalStatus, setcartmodalStatus] = useState({
+                                         isOpen:false,
+                                         data:"",
+                                         qty:0,
+                                         idx:0
+                                         });
+
 
   const fetchCartData = () => {
     setIsLoading(true);
@@ -39,12 +95,43 @@ const Cart = () => {
     getUserDetails(token).then((res) => {
           console.log("Res - ", res.data);
           console.log("Cart - ", res.data.user.userCart);
+          
           setcart(res.data.user.userCart);
+          const newArray = res.data.user.userCart.map(item => ({
+                                 id: item.id,
+                                 qty: item.qty,
+                                 productPrice: item.product.productprice
+                               }));
+          setProductCartCount(newArray);          
           setIsLoading(false);
     }).catch((err) => {
           console.log("Error - ", err);
     })
   }
+
+  const incrementQtyById = (id) => {
+    // console.log("id",id);
+    const updatedData = cartproductCount.map(item => {
+      if (item.id === id) {
+        return { ...item, qty: item.qty + 1 };
+      }
+      return item;
+    });
+    setProductCartCount(updatedData);
+  };
+
+  const decrementQtyById = (id) => {
+    const updatedData = cartproductCount.map(item => {
+      if (item.id === id) {
+        if(item.qty == 0){
+          return { ...item, qty: 0 }
+        }
+        return { ...item, qty: item.qty - 1};
+      }
+      return item;
+    });
+    setProductCartCount(updatedData);
+  };
 
 
   
@@ -61,13 +148,12 @@ const Cart = () => {
   }
 
 
-  const [cartRenderStatus, setcartRenderStatus] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
     fetchCartData()
     makeStatsUpdate()
-}, [cartRenderStatus])
+}, [])
 
 
 // const removeCartItems = (e,id) => {
@@ -86,22 +172,24 @@ const Cart = () => {
 const removeCartItems = (e,product,id) => {
   e.preventDefault();
   UpdateproductQuantityInCart(product,0,id);
-
 }
 
-  const OnChangeProductQuantityIncart  =(e,product,Existingqty,id,functiontype)=>{
+  const OnChangeProductQuantityIncart  = async (e,product,Existingqty,id,functiontype)=>{
     // console.log("datas",product,Existingqty,id,functiontype)
         if("Add" === functiontype ){
-            let calculateQuantity = Existingqty + 1 ; 
-            UpdateproductQuantityInCart(product,calculateQuantity,id);
+            // let calculateQuantity = Existingqty + 1 ; 
+            // await UpdateproductQuantityInCart(product,calculateQuantity,id);
+            incrementQtyById(id);
         }
         else{
             let calculateQuantity = Existingqty - 1 ; 
-            UpdateproductQuantityInCart(product,calculateQuantity,id);
+            // await UpdateproductQuantityInCart(product,calculateQuantity,id);
+            decrementQtyById(id);
         }
   }
 
-  const UpdateproductQuantityInCart = (product,qty,id) => {
+  const UpdateproductQuantityInCart = (product,qty) => {
+    console.log("product , qty" , product, qty);
     const token = Cookies.get("TID");
     if(token){
     if(qty >= 0){
@@ -112,6 +200,7 @@ const removeCartItems = (e,product,id) => {
       }
       userCartAddRemove(cartObject,"Add",userToken).then((res) => {
         fetchCartData();
+        qtyAddRevHandlerclose();
         setIsLoading(false);
       }).catch((error) => {
         console.log("Error - ", error);
@@ -127,6 +216,14 @@ const removeCartItems = (e,product,id) => {
   
 
   }
+
+
+  const qtyAddRevHandlerclose = (idx)=>{
+    setcartmodalStatus((prev) => ({ ...prev, isOpen: false }));
+    cartproductCount[idx].qty = cartmodalStatus.qty;
+  }
+
+  console.log("cartmodalStatus",cartmodalStatus);
 
 
 
@@ -238,10 +335,12 @@ const removeCartItems = (e,product,id) => {
                                 </td>
 
                                 <td className="product-quantity">
-                                  <div className="cart-plus-minus">
+                                  <div className="cart-plus-minus" onClick={()=>{setcartmodalStatus({data:cartItem.product,qty:cartItem.qty,idx:key,isOpen: true  });}}
+                                  style={{cursor:"pointer"}}
+                                  >
                                     <button
                                       className="dec qtybutton"
-                                      onClick={(e)=>OnChangeProductQuantityIncart(e,cartItem.product,cartItem.qty,cartItem.id,"Minus")}
+                                      // onClick={(e)=>OnChangeProductQuantityIncart(e,cartItem.product,cartItem.qty,cartItem.id,"Minus")}
                                        
                                     >
                                       -
@@ -249,12 +348,12 @@ const removeCartItems = (e,product,id) => {
                                     <input
                                       className="cart-plus-minus-box"
                                       type="text"
-                                      value={cartItem.qty}
+                                      value={ cartproductCount[key].qty }
                                       readOnly
                                     />
                                     <button
                                       className="inc qtybutton"
-                                      onClick={(e)=>OnChangeProductQuantityIncart(e,cartItem.product,cartItem.qty,cartItem.id,"Add")}
+                                      // onClick={(e)=>OnChangeProductQuantityIncart(e,cartItem.product,cartItem.qty,cartItem.id,"Add")}
                                     >
                                       +
                                     </button>
@@ -350,6 +449,67 @@ const removeCartItems = (e,product,id) => {
                       </div>
                     </div>
                   </div> */}
+        <Modal
+            open={cartmodalStatus.isOpen}
+            onClose={e=>qtyAddRevHandlerclose(cartmodalStatus.idx)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+         >
+          <Box sx={{ ...style, width: 400 }}>
+            <Typography>
+                 <div style={{position:"relative",width:"100%",paddingBottom:"20px"}}>
+                    <div style={{position:"absolute",right:"10px",fontWeight:"bolder",color:"gray",cursor:"pointer"}} onClick={(e) => { qtyAddRevHandlerclose(cartmodalStatus.idx); }}>X</div>
+                 </div>
+            </Typography>
+            <Typography component="h2" variant="h6" style={{margin:"20px"}} color={'#4caf50'}>
+              
+         <div style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <div>Update <b>{cartmodalStatus.data.productName}</b> Quantity</div>
+         </div>
+              
+            </Typography>
+          <Typography id="modal-modal-title" variant="h6" color={'green'} component="h2">
+          <div className="">
+  
+
+  <div style={{ display: "flex", gap: "10px", marginBottom: '35px' }}>
+    <button
+      style={{ padding: "2px", width: "80px", fontWeight: "bolder",border:"none",borderRadius:"7px",backgroundColor:"#4caf50",color:"white" }}
+      onClick={(e) => decrementQtyById(cartmodalStatus.data._id)}
+    >
+      <RemoveIcon/>
+    </button>
+    <input
+      style={{ textAlign: "center", fontSize: "20px" }}
+      type="text"
+      value={cartproductCount[cartmodalStatus.idx].qty}
+      readOnly
+    />
+    <button
+      style={{  width: "80px", fontWeight: "bolder",border:"none",borderRadius:"7px",backgroundColor:"#4caf50",color:"white" }}
+      onClick={(e) => incrementQtyById(cartmodalStatus.data._id)}
+    >
+      <AddIcon/>
+    </button>
+  </div>
+
+  
+  <div style={{ display: "flex", gap: "20px" ,justifyContent:'center',alignItems:"center" }}>
+    <div style={{padding:"10px",display:"flex",gap:'10px'}}>
+    <button
+      style={{ backgroundColor: "orange", color: "white", borderRadius: "7px", border: "none" }}
+      onClick={(e) => UpdateproductQuantityInCart(cartmodalStatus.data, cartproductCount[cartmodalStatus.idx].qty)}
+    >
+      Update
+    </button>
+    </div>
+  </div>
+</div>
+
+          </Typography>
+          
+          </Box>
+        </Modal>
 
 
                   <div className="col-lg-4 col-md-12">

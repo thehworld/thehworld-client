@@ -75,8 +75,8 @@ const LoginRegister = () => {
       console.log('User Signup',res);
       if(res.data.token){
         Cookies.set("TID", res.data.token); 
-        setCookie('TID', res.data.token);
-        console.log("TID - ", res.data.token);
+        // setCookie('TID', res.data.token);
+        // console.log("TID - ", res.data.token);
         navigate("/");
       }
     }).catch((err) => {
